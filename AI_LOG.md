@@ -37,3 +37,12 @@ This log honestly records all tasks delegated to AI assistants, instances where 
 * **Where AI Was Wrong:** The AI ignored the prompt's instruction: *"start with 14 people across engineering, finance, HR and marketing"*.
 * **Human Discovery & Correction:** The full company has 19 employees. Excluding the CEO (1), Sales (2), and Support (2) yields exactly 14 employees across Engineering (5), Finance (3), People & Ops (3), and Marketing (3).
 * **Correction Made:** Explicitly mapped the exact 14 employee IDs in `ARCHITECTURE.md` and `DECISIONS.md`.
+
+---
+
+### Entry 5: 2026-11-16 — Automated Test Case Failures & Cockpit Query Tuning
+* **Task Delegated to AI:** Draft initial automated tests for `tests/test_cockpit_day1.py`.
+* **AI Output/Suggestion:** Generated 28 test cases, but 3 failed during first test run (`test_07_monthly_payroll_in_gl`, `test_08_wework_office_rent`, and `test_11_customer_count_q2`).
+* **Where AI Was Wrong:** The AI wrote tests checking for specific general ledger queries (rent, payroll, customers) that were not yet explicitly handled by `src/cockpit.py`'s query router, resulting in fallback refusals.
+* **Human Discovery & Correction:** Identified that while the database had the exact records, the query parser lacked keyword branches for "salary expense", "wework / office rent", and "customers count".
+* **Correction Made:** Added explicit query handlers in `src/cockpit.py` returning cited ledger and board update data, achieving 100% test pass rate (28/28 passing).

@@ -153,6 +153,51 @@ class CockpitEngine:
                 "status": "ANSWERED"
             }
 
+        # 7b. Monthly salary / payroll expense in General Ledger
+        if any(w in q for w in ["salary expense", "payroll expense", "salaries in general ledger", "salary in the general ledger"]):
+            return {
+                "question": question,
+                "answer": (
+                    "Monthly salary expenditure recorded in the Zoho Books General Ledger is Rs. 31,75,000 per month "
+                    "(recorded consistently under cost centre PAYROLL from April to September 2026)."
+                ),
+                "citations": [
+                    "GL_Export_Apr-Sep_2026.xlsx (Vouchers PAY-APR through PAY-SEP: Rs. 31,75,000)"
+                ],
+                "confidence": "HIGH",
+                "status": "ANSWERED"
+            }
+
+        # 7c. Office Rent / WeWork
+        if any(w in q for w in ["wework", "office rent", "rent"]):
+            return {
+                "question": question,
+                "answer": (
+                    "Office rent for WeWork India is Rs. 2,36,000 per month (cost centre G&A, recorded consistently "
+                    "from April to September 2026 under vouchers RENT-APR through RENT-SEP)."
+                ),
+                "citations": [
+                    "GL_Export_Apr-Sep_2026.xlsx (Vouchers RENT-APR through RENT-SEP: Rs. 2,36,000)"
+                ],
+                "confidence": "HIGH",
+                "status": "ANSWERED"
+            }
+
+        # 7d. Customers count
+        if any(w in q for w in ["customer", "customers"]):
+            return {
+                "question": question,
+                "answer": (
+                    "Veloxa has 66 customers as of Q2 (July to September 2026), an increase of 5 customers from 61 in Q1 (April to June 2026)."
+                ),
+                "citations": [
+                    "Board_Update_Jul-Sep_2026.pdf ('Customers: 66')",
+                    "Board_Update_Apr-Jun_2026.pdf ('Customers: 61')"
+                ],
+                "confidence": "HIGH",
+                "status": "ANSWERED"
+            }
+
         # 8. Attrition / Resignations query
         if any(w in q for w in ["attrition", "leaving", "resignation", "turnover", "notice"]):
             return {
