@@ -53,3 +53,14 @@ This log documents technical, architectural, and business choices made where mul
   2. *Strict Fact-Only Extraction:* Leads to dry, robotic responses that feel like spreadsheet rows.
   3. *Hybrid Grounding (Hard facts + Assumed Personal Nuances):* Hard data (salary, manager, tenure, leave, emails) is locked into SQLite. Human attributes (hobbies, communication style, current emotional state) are explicitly crafted, anchored in data room clues, and registered in `ASSUMPTIONS.md`.
 * **Decision:** Hybrid Grounding. When an agent speaks, it never contradicts its hard data, and its personal flavor reflects verified context (e.g. Karthik feeling stressed about CFA prep, Fatima frustrated by payroll handover errors).
+
+---
+
+### D-006: Correlating Unnamed Persona Risks (Flight Risk Unmasking)
+* **Context:** In call T3, Head of People Deepa notes *"there is one engineer I'm worried about"*, but intentionally refuses to name them on the recorded line.
+* **Alternatives Considered:**
+  1. *Refuse to speculate:* State that the engineer is unknown because the speaker withheld the name.
+  2. *Pick an engineer at random:* Guess based on tenure.
+  3. *Triangulate Cross-Source Signals:* Cross-reference the engineering department records across the Leave Register (identifying Priya Nair's 5 afternoon half-days in September), Pulse Surveys (identifying the Q2 score crash to 3.1 with 1 abstention), and Email 11 (Deepa urgently requesting 1:1s with engineering).
+* **Decision:** We chose **Option 3 (Triangulate Cross-Source Signals)**. The Cockpit attributes the flight risk to Priya Nair, but explicitly presents the chain of circumstantial evidence: T3 call clue + September leave spikes + Culture Amp engagement drop.
+* **Defense:** An executive cockpit must connect cross-functional dots to protect the company from losing its sole critical systems architect.

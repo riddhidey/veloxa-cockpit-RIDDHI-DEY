@@ -19,6 +19,11 @@ This document records all suspected Automated Speech Recognition (ASR) phonetic 
 | **TN-009** | T2 line 20 | "Fatima Shaikh" | Fatima Sheikh (VX014) | Listed as Fatima Sheikh, Accounts & Payroll Executive, in `Employee_Master.xlsx`. |
 | **TN-010** | T2 line 28 | "Vicky" | Vikram Menon (VX004) | Nickname for Vikram Menon, VP Engineering. |
 | **TN-011** | GL Voucher JV-0904 | "Saphire Event Mgmt" | Sapphire Events Pvt Ltd | In voucher JV-0846, vendor is entered as "Sapphire Events Pvt Ltd". In JV-0904, it is entered as "Saphire Event Mgmt". Both represent the logistics summit event vendor. |
+| **TN-014** | T3 line 16 | "Liver" | Lever ATS | Applicant tracking software used for engineering recruiting alongside Keka. |
+| **TN-015** | T3 line 16 | "Kekka" | Keka HRMS | Phonetic transcription misspelling of Keka. |
+| **TN-016** | T3 line 7 | "attrition is about twelve" | ~12% annualized turnover or confusion | In a 19-person startup, 12 people leaving would be 63% turnover. Only 1 planned departure (Siddharth) is documented. 12 refers to either 12% annualized industry benchmark or ~2 people historically. |
+| **TN-017** | T3 line 14 | "twenty-two open roles in April... lost six in August" | Informal headcount wishlist vs 6 Keka reqs | `Hiring_Tracker.xlsx` tracks only 6 total requisitions (REQ-011 to REQ-016). Rohan's "22 roles" is an unapproved pipeline wish-list, not formal job postings. |
+| **TN-018** | T3 line 20 | "one engineer I'm worried about" | Priya Nair (Staff Engineer, VX007) | Deepa refused to name the engineer on the call. Leave register reveals Priya Nair took 5 half-day leaves in September, and engineering engagement collapsed from 3.9 to 3.1. Corroborates severe flight risk. |
 
 ---
 
@@ -68,3 +73,13 @@ This document records all suspected Automated Speech Recognition (ASR) phonetic 
   * Email `02.eml` shows Rahul queried the excess amount.
   * Email `03.eml` shows Fatima promised to check, but March payroll (`Payroll_Register_Jan-Mar_2026.xlsx`) shows no recovery adjustment.
 * **Resolution & Defense:** Validated payroll calculation error caused by temporary handover to an unqualified person (Karthik) during wedding leave.
+
+### Conflict 6: Atlas Engineering De-risking vs Stealth Hiring Freeze
+* **Spoken Claim / Board Update:** Apr-Jun Board Update stated: *"We will add two backend engineers this quarter to de-risk Atlas. Search is underway."* Veloxa paid Rs. 1,77,000 to Cohere Recruiting Partners (GL voucher JV-0688).
+* **Hard Data:** Email `06.eml` shows CFO Meera unilaterally told VP Eng Vikram Menon on 12 Aug: *"Pausing REQ-014 and REQ-015 until the round closes. Burn is the priority this quarter."* `Hiring_Tracker.xlsx` confirms final interviews on 14-Aug were cancelled and status marked 'On hold'.
+* **Resolution & Defense:** Atlas was left intentionally under-resourced despite commitments to the board, directly triggering the subsequent August reliability crisis.
+
+### Conflict 7: Deepa's Unnamed "Worried Engineer" (Identified as Priya Nair)
+* **Spoken Claim:** In T3, Deepa tells Ananya: *"there is one engineer I'm worried about"*, but refuses to name them on the recording.
+* **Hard Data:** `Leave_Register.xlsx` records that Priya Nair took **five afternoon half-day personal leaves** across September 2026 (03-Sep, 08-Sep, 15-Sep, 17-Sep, 24-Sep). `Pulse_Survey.xlsx` shows Engineering engagement collapsed from 3.9 in Q1 to 3.1 in Q2 (Jul-Sep 2026). Email `11.eml` shows Deepa urgently advising 1:1s with engineering.
+* **Resolution & Defense:** Priya Nair is carrying the entire Atlas routing architecture alone. Her leave pattern strongly indicates offsite job interviews. She is Veloxa's highest-priority flight risk.

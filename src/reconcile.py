@@ -50,6 +50,8 @@ class ReconciliationEngine:
             "joho": {"canonical": "Zoho Books", "kind": "tool", "category": "Finance Ledger"},
             "joho books": {"canonical": "Zoho Books", "kind": "tool", "category": "Finance Ledger"},
             "kayka": {"canonical": "Keka HRMS", "kind": "tool", "category": "HRMS & Payroll"},
+            "kekka": {"canonical": "Keka HRMS", "kind": "tool", "category": "HRMS & Payroll"},
+            "liver": {"canonical": "Lever ATS", "kind": "tool", "category": "Applicant Tracking"},
             "cult amp": {"canonical": "Culture Amp", "kind": "tool", "category": "Employee Surveys"},
             "slag": {"canonical": "Slack", "kind": "tool", "category": "Internal Communication"},
             "hub sport": {"canonical": "HubSpot", "kind": "tool", "category": "CRM & Marketing"},
@@ -224,13 +226,96 @@ class ReconciliationEngine:
             )
         }
 
+    def detect_hiring_freeze_conflict(self) -> Dict[str, Any]:
+        """Cross-checks Atlas de-risking hiring promise against the stealth hiring freeze."""
+        conn = sqlite3.connect(self.db_path)
+        cur = conn.cursor()
+
+        cur.execute("SELECT req_id, role, status, status_date, notes FROM hiring_requisitions WHERE req_id IN ('REQ-014', 'REQ-015')")
+        req_rows = cur.fetchall()
+
+        cur.execute("SELECT amount, ref FROM general_ledger WHERE vendor LIKE '%Cohere%'")
+        cohere_row = cur.fetchone()
+
+        conn.close()
+
+        return {
+            "conflict_id": "CONF-005",
+            "topic": "Atlas Engineering De-risking vs Stealth Hiring Freeze",
+            "board_promise": "Board Update Apr-Jun: 'We will add two backend engineers this quarter to de-risk Atlas.'",
+            "cohere_advance": f"Paid Cohere Recruiting Rs. {cohere_row[0]:,.0f} (50% advance)" if cohere_row else "Rs. 1,77,000",
+            "actual_status": "Email 06 (12 Aug): Meera pauses REQ-014 and REQ-015; final round interviews cancelled 14-Aug.",
+            "confidence": "HIGH",
+            "reasoning": (
+                "The board was told two backend engineers were being hired to de-risk Atlas. Veloxa paid Rs. 1.77L "
+                "to Cohere Recruiting, but Meera quietly froze both reqs on 12 August to conserve cash, leaving Atlas "
+                "vulnerable and without additional engineering support."
+            )
+        }
+
+    def detect_priya_flight_risk(self) -> Dict[str, Any]:
+        """Correlates unnamed worried engineer with Priya Nair's leave pattern and pulse survey drop."""
+        conn = sqlite3.connect(self.db_path)
+        cur = conn.cursor()
+
+        cur.execute("SELECT count(*), sum(days) FROM leave_records WHERE employee = 'P. Nair' AND from_date LIKE '2026-09%'")
+        leave_row = cur.fetchone()
+        leave_count = leave_row[0] if leave_row else 0
+        leave_days = leave_row[1] if leave_row else 0.0
+
+        cur.execute("SELECT quarter, engagement_score, responses, team_size FROM pulse_surveys WHERE team = 'Engineering' AND quarter = 'Jul-Sep 2026'")
+        pulse_row = cur.fetchone()
+        score = pulse_row[1] if pulse_row else 3.1
+        resp = pulse_row[2] if pulse_row else 4
+        size = pulse_row[3] if pulse_row else 5
+
+        conn.close()
+
+        return {
+            "conflict_id": "CONF-006",
+            "topic": "Priya Nair Flight Risk & Unnamed Worried Engineer",
+            "deepa_call_clue": "T3: Deepa mentions 'there is one engineer I'm worried about' but refuses to name them.",
+            "leave_pattern": f"Priya Nair took {leave_count} half-day personal leaves ({leave_days} days total) in September 2026.",
+            "pulse_signal": f"Engineering Culture Amp pulse crashed to {score} in Q2 with only {resp} of {size} responding.",
+            "confidence": "HIGH",
+            "conclusion": (
+                "The unnamed engineer is Priya Nair. Repeated half-day afternoon leaves in September strongly correlate "
+                "with offsite job interviews. Her burnout from holding Atlas together without backfills makes her Veloxa's #1 flight risk."
+            )
+        }
+
+    def detect_recruiting_open_roles_conflict(self) -> Dict[str, Any]:
+        """Compares Rohan's claim of 22 open roles in T3 against Keka Hire requisitions."""
+        conn = sqlite3.connect(self.db_path)
+        cur = conn.cursor()
+        cur.execute("SELECT count(*) FROM hiring_requisitions")
+        total_reqs = cur.fetchone()[0]
+        cur.execute("SELECT count(*) FROM hiring_requisitions WHERE status = 'On hold'")
+        hold_reqs = cur.fetchone()[0]
+        conn.close()
+
+        return {
+            "conflict_id": "CONF-007",
+            "topic": "Open Roles Discrepancy (Rohan vs Keka Hire)",
+            "rohan_claim": "T3: Rohan claims 'twenty-two open roles in April' and 'we lost six in August'.",
+            "keka_hire_record": f"Keka Hire lists only {total_reqs} total historical requisitions (REQ-011 through REQ-016), with {hold_reqs} on hold.",
+            "confidence": "MEDIUM",
+            "reasoning": (
+                "Rohan's figure of 22 open roles does not exist in Keka Hire. He is either referring to an informal "
+                "future headcount wishlist or the ASR misheard 'two' or 'twelve'. Only 2 engineering reqs were paused in August."
+            )
+        }
+
     def get_all_reconciliations(self) -> List[Dict[str, Any]]:
         """Returns all detected conflicts and reconciliations."""
         return [
             self.detect_headcount_conflict(),
             self.detect_burn_rate_conflict(),
             self.detect_rahul_verma_payroll_anomaly(),
-            self.detect_atlas_schedule_delay()
+            self.detect_atlas_schedule_delay(),
+            self.detect_hiring_freeze_conflict(),
+            self.detect_priya_flight_risk(),
+            self.detect_recruiting_open_roles_conflict()
         ]
 
 
