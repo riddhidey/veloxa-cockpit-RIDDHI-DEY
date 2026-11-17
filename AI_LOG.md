@@ -46,3 +46,21 @@ This log honestly records all tasks delegated to AI assistants, instances where 
 * **Where AI Was Wrong:** The AI wrote tests checking for specific general ledger queries (rent, payroll, customers) that were not yet explicitly handled by `src/cockpit.py`'s query router, resulting in fallback refusals.
 * **Human Discovery & Correction:** Identified that while the database had the exact records, the query parser lacked keyword branches for "salary expense", "wework / office rent", and "customers count".
 * **Correction Made:** Added explicit query handlers in `src/cockpit.py` returning cited ledger and board update data, achieving 100% test pass rate (28/28 passing).
+
+---
+
+### Entry 6: 2026-11-17 — Voice Note T6a Blindspot & Pushback Decision
+* **Task Delegated to AI:** Review CEO Voice Note T6a (*"When I open it, it should just tell me what to worry about. Top three. Okay, bye."*) and recommend code changes.
+* **AI Output/Suggestion:** The AI recommended hard-limiting `what_should_i_worry_about()` with `risks[:3]`, completely discarding risks #4 and #5.
+* **Where AI Was Wrong:** The AI blindly complied with executive request without evaluating the risk of information suppression.
+* **Human Discovery & Correction:** The challenge brief explicitly stated: *"Agreeing to everything is not a good sign."* If we had suppressed risks past #3, the CEO would have remained completely ignorant of Siddharth Mehta's unstaffed departure (leaving Atlas without product marketing collateral) and the unadjusted payroll overpayment.
+* **Correction Made:** We implemented a two-tier presentation in `src/cockpit.py` (Top 3 Immediate Priorities + Secondary Watchlist) and authored a formal pushback memo in `docs/VOICE_NOTE_RESPONSES.md`.
+
+---
+
+### Entry 7: 2026-11-17 — Unmasking the "Worried Engineer"
+* **Task Delegated to AI:** Review transcript T3 and determine who Deepa was referring to when stating *"there is one engineer I'm worried about"*.
+* **AI Output/Suggestion:** The AI suggested Sneha Kulkarni because SREs frequently experience burnout.
+* **Where AI Was Wrong:** The AI guessed based on generic industry stereotypes instead of cross-referencing primary HR records.
+* **Human Discovery & Correction:** When we inspected `Leave_Register.xlsx`, Sneha took only 2 days of sick leave in April. In contrast, Priya Nair took **five distinct half-day leaves on weekday afternoons in September 2026** (03-Sep, 08-Sep, 15-Sep, 17-Sep, 24-Sep). Paired with the Engineering Culture Amp score plunging to 3.1 in Q2, Priya's leave pattern showed classic offsite job interview behavior.
+* **Correction Made:** Grounded the flight risk in Priya Nair with triangulated evidence across `Leave_Register.xlsx`, `Pulse_Survey.xlsx`, and `T3_Head_of_People_Call.docx`.
