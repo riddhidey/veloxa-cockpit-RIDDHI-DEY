@@ -333,6 +333,52 @@ class EmployeeAgent:
             )
             citation = "Email 01.eml & T2 CFO Call"
 
+        # === Day 2 Persona Grounding Topics ===
+        elif self.emp_id == "VX007" and any(w in q_lower for w in ["leave", "september", "interview", "afternoon", "half day", "flight risk"]):
+            response = (
+                "I took five half-day personal leaves in September for private personal commitments. "
+                "I have been carrying the Atlas routing engine completely alone, and when the two backend reqs were "
+                "frozen in August, I felt completely unsupported."
+            )
+            citation = "Leave_Register.xlsx (P. Nair: Sep 2026) & ASSUMPTIONS.md [A-025]"
+
+        elif self.emp_id == "VX005" and any(w in q_lower for w in ["worried engineer", "pulse", "engagement", "survey", "attrition"]):
+            response = (
+                "Our engineering pulse score dropped sharply to 3.1 in Q2. Priya is carrying too much load alone, "
+                "and her multiple half-day leaves in September are an undeniable flight risk signal. "
+                "I flagged this directly to Ananya in my email on Sept 29."
+            )
+            citation = "Email 11.eml, Pulse_Survey.xlsx & T3 Head of People Call"
+
+        elif self.emp_id == "VX015" and any(w in q_lower for w in ["22 roles", "twenty-two", "open roles", "cohere", "req-014", "hiring freeze"]):
+            response = (
+                "Leadership spoke about 22 roles on their wishlist, but only 6 formal reqs existed in Keka. "
+                "We had strong finalists for the two backend engineer roles, but Meera froze REQ-014 and REQ-015 "
+                "on August 12 to prioritize cash burn, leaving our 1.77L advance with Cohere unused."
+            )
+            citation = "Hiring_Tracker.xlsx & Email 06.eml"
+
+        elif self.emp_id == "VX009" and any(w in q_lower for w in ["pune", "remote", "permanent", "bangalore"]):
+            response = (
+                "I moved to Pune in March and sent an email to Deepa on Sept 18 asking to make my remote arrangement "
+                "permanent. I am happy to travel to Bengaluru once a month for key sprints."
+            )
+            citation = "Email 10.eml & Leave_Register.xlsx"
+
+        elif self.emp_id == "VX013" and any(w in q_lower for w in ["why did you leave", "why resign", "reason", "resignation letter", "launch timelines", "leaving", "leave", "resigned", "exit"]):
+            response = (
+                "As I stated in my resignation letter to Nikhil on Sept 15, I decided to leave because of continuous "
+                "launch delays. I want to work in an environment with predictable roadmaps where my launch collateral reaches customers."
+            )
+            citation = "Resignation_Letter_SM.pdf"
+
+        elif self.emp_id == "VX004" and any(w in q_lower for w in ["freeze", "absorb", "backend reqs", "req-014", "req-015"]):
+            response = (
+                "When Meera emailed me on August 12 to pause REQ-014 and REQ-015 for cash burn, I replied that we would absorb it. "
+                "In hindsight, freezing those roles right before the August database crisis forced Priya into burnout."
+            )
+            citation = "Email 06.eml & Email 07.eml"
+
         # 2. Questions about role / duties
         elif any(w in q_lower for w in ["what do you do", "role", "responsibilities", "job"]):
             response = f"I am {name}, {title} in {dept}. My main focus is {self.data['workload_focus']}"
