@@ -24,9 +24,10 @@ Run the following commands from the repository root to install dependencies, ing
 # 1. Install dependencies
 pip install -r requirements.txt
 
-# 2. Ingest Day 1 & Day 2 data into local SQLite database (veloxa.db)
+# 2. Ingest Day 1, Day 2 & Day 3 data into local SQLite database (veloxa.db)
 python -m src.ingest_day1
 python -m src.ingest_day2
+python -m src.ingest_day3
 
 # 3. Launch the Cockpit (Auto-launches Executive Radar per CEO Voice Note T6a)
 python -m src.cockpit
@@ -36,6 +37,9 @@ python -m src.cockpit
 You can also ask specific questions using the `--query` flag:
 
 ```bash
+# Query the Jira Atlas GA release date deception (triggers contradiction refusal)
+python -m src.cockpit --query "What is the actual Jira release date for Atlas GA?"
+
 # Query the stealth hiring freeze
 python -m src.cockpit --query "What is happening with the backend hiring freeze?"
 
@@ -58,7 +62,7 @@ python -m src.agents
 
 ## Running the Automated Test Suite
 
-Run the full automated test suite (**48 passing tests** covering Day 1 and Day 2):
+Run the full automated test suite (**70 passing tests** covering Day 1, Day 2, and Day 3):
 
 ```bash
 python -m unittest discover tests
@@ -84,19 +88,22 @@ veloxa-cockpit-[name]/
 ├── README.md                       # Project overview and setup instructions
 ├── requirements.txt                # Python dependencies
 ├── docs/
-│   └── VOICE_NOTE_RESPONSES.md     # Written responses & pushback to CEO voice notes (T6a)
+│   └── VOICE_NOTE_RESPONSES.md     # Written responses & pushback to CEO voice notes (T6a, T6b)
 ├── data/
 │   ├── day1/                       # Day 1 Data room & transcripts (T1, T2)
-│   └── day2/                       # Day 2 HR, surveys, emails, and transcripts (T3, T6a)
+│   ├── day2/                       # Day 2 HR, surveys, emails, and transcripts (T3, T6a)
+│   └── day3/                       # Day 3 Engineering Jira, incidents, rotas, and transcripts (T4, T5, T6b)
 ├── src/
 │   ├── ingest_day1.py              # Day 1 ingestion parser & SQLite builder
 │   ├── ingest_day2.py              # Day 2 ingestion parser for hiring, leave, pulse
+│   ├── ingest_day3.py              # Day 3 ingestion parser for Jira, incidents, rotas
 │   ├── reconcile.py                # Entity resolution, conflict & flight risk detection
 │   ├── agents.py                   # 14 grounded employee persona agents
 │   └── cockpit.py                  # CXO Q&A engine & auto-launch worry radar CLI
 └── tests/
     ├── test_cockpit_day1.py        # Day 1 test suite (28 tests)
-    └── test_cockpit_day2.py        # Day 2 test suite (20 tests)
+    ├── test_cockpit_day2.py        # Day 2 test suite (20 tests)
+    └── test_cockpit_day3.py        # Day 3 test suite (22 tests)
 ```
 
 ---
@@ -104,7 +111,7 @@ veloxa-cockpit-[name]/
 ## Governance & Milestone Integrity Logs
 
 - [ARCHITECTURE.md](ARCHITECTURE.md) - System architecture, data flow, agent design.
-- [docs/VOICE_NOTE_RESPONSES.md](docs/VOICE_NOTE_RESPONSES.md) - Formal response to CEO voice note T6a with data-backed pushback.
+- [docs/VOICE_NOTE_RESPONSES.md](docs/VOICE_NOTE_RESPONSES.md) - Formal responses to CEO voice notes (T6a, T6b pushback & strategic rationale).
 - [ASSUMPTIONS.md](ASSUMPTIONS.md) - Assumption log with confidence and invalidation criteria.
 - [TRANSCRIPT_NOTES.md](TRANSCRIPT_NOTES.md) - Speech-to-text mishearings and source contradictions.
 - [DECISIONS.md](DECISIONS.md) - Technical trade-offs and rationale.

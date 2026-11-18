@@ -64,3 +64,30 @@ This log honestly records all tasks delegated to AI assistants, instances where 
 * **Where AI Was Wrong:** The AI guessed based on generic industry stereotypes instead of cross-referencing primary HR records.
 * **Human Discovery & Correction:** When we inspected `Leave_Register.xlsx`, Sneha took only 2 days of sick leave in April. In contrast, Priya Nair took **five distinct half-day leaves on weekday afternoons in September 2026** (03-Sep, 08-Sep, 15-Sep, 17-Sep, 24-Sep). Paired with the Engineering Culture Amp score plunging to 3.1 in Q2, Priya's leave pattern showed classic offsite job interview behavior.
 * **Correction Made:** Grounded the flight risk in Priya Nair with triangulated evidence across `Leave_Register.xlsx`, `Pulse_Survey.xlsx`, and `T3_Head_of_People_Call.docx`.
+
+---
+
+### Entry 8: 2026-11-18 — Catching Vikram's Jira Release Date Deception
+* **Task Delegated to AI:** Determine the current Atlas GA target date from transcript T5.
+* **AI Output/Suggestion:** The AI reported that Atlas GA was *"on track for late September with a couple of weeks buffer as stated by VP Engineering Vikram Menon."*
+* **Where AI Was Wrong:** The AI relied on the executive's spoken claim in T5 instead of validating the engineering issue tracker.
+* **Human Discovery & Correction:** When we parsed `Jira_Export_ATLAS.xlsx` (`Versions` sheet), we uncovered that Vikram had already changed the release date to **15 December 2026** on **2 September 2026** (`changed_by: vikram`). Vikram was actively concealing a 3-month slip from the CEO.
+* **Correction Made:** Implemented `detect_vikram_release_deception()` in `src/reconcile.py`, elevated it to Rank 2 (Critical) in the worry radar, and added dual-reporting contradiction refusal in `src/cockpit.py`.
+
+---
+
+### Entry 9: 2026-11-18 — Uncovering Sneha's Double On-Call Shift Alias
+* **Task Delegated to AI:** Analyze on-call staffing in `OnCall_Rota.xlsx`.
+* **AI Output/Suggestion:** The AI claimed that on-call was shared between Sneha and a colleague named Snehal.
+* **Where AI Was Wrong:** The AI treated "Sneha" and "Snehal" as two distinct people.
+* **Human Discovery & Correction:** `Employee_Master.xlsx` has no employee named Snehal. Transcript T5 notes: *"Mentions Sneha once later; unclear if same person."* PagerDuty incident responders INC-206 and INC-207 list Snehal for routing-api, Sneha's exact service. Sneha was scheduled as both Primary and Secondary on-call across the same weeks, leading to total burnout and emergency contractor spend (Patil Infra, Rs. 1,41,600).
+* **Correction Made:** Added `snehal -> Sneha Kulkarni` alias mapping and documented the double-duty overload in `TRANSCRIPT_NOTES.md` and `reconcile.py`.
+
+---
+
+### Entry 10: 2026-11-18 — Temporal Isolation Enforcement Across Test Suites
+* **Task Delegated to AI:** Extend `what_should_i_worry_about()` for Day 3.
+* **AI Output/Suggestion:** The AI expanded the risk radar list to 6 items globally, which inadvertently broke Day 2 regression tests that asserted exactly 5 risks for Day 2.
+* **Where AI Was Wrong:** The AI neglected temporal point-in-time isolation between release days.
+* **Human Discovery & Correction:** The hackathon rules strictly mandate that past days must reflect what was known on that date without future leakage.
+* **Correction Made:** Refactored `what_should_i_worry_about()` and query routes to check `self.as_of_date`. On or before 17 Nov (Day 2), it returns 5 risks; on 18 Nov (Day 3), it returns 6 risks, maintaining 100% passing status across all 70 tests.

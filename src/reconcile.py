@@ -361,7 +361,7 @@ class ReconciliationEngine:
             "confidence": "HIGH",
             "conclusion": (
                 "Vikram's assertion that engineering is not overloaded is directly contradicted by primary logs. "
-                "Sneha was on-call 24/7 as both primary and secondary, leading to burnout and emergency external contractor costs."
+                "Sneha Kulkarni was on-call 24/7 as both primary and secondary, leading to burnout and emergency external contractor costs."
             )
         }
 

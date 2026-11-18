@@ -30,11 +30,21 @@ class CockpitEngine:
         q = question.lower().strip()
 
         # 1. Unknown / Out of Temporal Scope / Future questions
-        if any(w in q for w in ["q4 2026", "fy28", "2027", "next year", "ipo", "series b", "acquisition"]):
+        if any(w in q for w in ["q4 2026", "fy28", "2027", "next year", "ipo", "series b", "acquisition", "t6c", "t6d"]):
             return {
                 "question": question,
-                "answer": "I don't know. This information is not present in records released up to 16 Nov 2026.",
-                "citations": ["Temporal Gating: Day 1 (2026-11-16) boundary"],
+                "answer": f"I don't know. This information is not present in records released up to {self.as_of_date}.",
+                "citations": [f"Temporal Gating: As-of {self.as_of_date} boundary"],
+                "confidence": "LOW",
+                "status": "REFUSAL_UNKNOWN"
+            }
+
+        # 1b. Temporal gating for Day 3 materials when queried on Day 1 or Day 2
+        if self.as_of_date < "2026-11-18" and any(w in q for w in ["pagerduty", "incidents in august", "sprint velocity", "git commit", "jira release", "december 15"]):
+            return {
+                "question": question,
+                "answer": f"I don't know. This information is not present in records released up to {self.as_of_date}.",
+                "citations": [f"Temporal Gating: Day 3 engineering records not available as of {self.as_of_date}"],
                 "confidence": "LOW",
                 "status": "REFUSAL_UNKNOWN"
             }
@@ -113,6 +123,24 @@ class CockpitEngine:
                 "confidence": "HIGH",
                 "status": "REFUSAL_CONTRADICTION",
                 "contradiction_details": deception["conclusion"]
+            }
+
+        # 4c. Atlas Launch Kit & Collateral query (Day 3 - checked before general Atlas)
+        if any(w in q for w in ["launch kit", "atlas collateral", "marketing deck", "unpublished page", "atlas launch kit"]):
+            return {
+                "question": question,
+                "answer": (
+                    "The Atlas v1 launch kit was fully completed by Siddharth Mehta on 21 July 2026 (Atlas_Launch_Kit_v1.pdf). "
+                    "It included a sales launch deck, an unpublished website page, and a 3-part customer email sequence. "
+                    "Siddharth notified Nikhil on 22 July (05.eml) that marketing was ready, but engineering delays stalled release."
+                ),
+                "citations": [
+                    "Atlas_Launch_Kit_v1.pdf (Completed 21 Jul 2026 by Sid)",
+                    "05.eml (Siddharth to Nikhil: 'Launch kit is done, just need a date')",
+                    "T4 Head of Marketing Call ('Sid launch kit ready since July')"
+                ],
+                "confidence": "HIGH",
+                "status": "ANSWERED"
             }
 
         # 5. Atlas Routing Engine v3 / Product delivery query
@@ -418,8 +446,98 @@ class CockpitEngine:
         Synthesizes a prioritized, evidence-backed list of organizational,
         financial, and operational risks for the CEO.
         Top 3 are formatted as Immediate Priorities per Voice Note T6a.
+        Respects temporal point-in-time isolation based on self.as_of_date.
         """
-        risks = [
+        # Day 2 Point-in-time view (as of 17 Nov or earlier)
+        if self.as_of_date <= "2026-11-17":
+            return [
+                {
+                    "rank": 1,
+                    "tier": "TOP 3 IMMEDIATE CRITICAL FOCUS",
+                    "title": "Severe Financial Reporting Discrepancy & Burn Understatement",
+                    "severity": "CRITICAL",
+                    "summary": (
+                        "CFO Meera reported monthly burn as '2.2 lakhs a month', but actual net monthly burn is Rs. 44L to 46L. "
+                        "Monthly payroll alone is Rs. 31,75,000, and runway is 13 months. The CEO is operating under a 20x false assumption of burn."
+                    ),
+                    "evidence": [
+                        "GL_Export_Apr-Sep_2026.xlsx (Payroll cost centre totals: Rs. 31,75,000)",
+                        "Board_Update_Jul-Sep_2026.pdf (Monthly burn Rs. 44L, Runway 13 mo)",
+                        "T2 CFO Call (Spoken claim: '2.2 lakhs')"
+                    ],
+                    "recommendation": "Reconcile full cash flow statement with Meera immediately; establish executive visibility into gross monthly payroll."
+                },
+                {
+                    "rank": 2,
+                    "tier": "TOP 3 IMMEDIATE CRITICAL FOCUS",
+                    "title": "Single Point of Failure & Priya Nair Flight Risk",
+                    "severity": "CRITICAL",
+                    "summary": (
+                        "Priya Nair is carrying the entire Atlas routing engine v3 alone. In September, she took 5 afternoon half-day personal leaves, "
+                        "while Engineering Culture Amp engagement plunged to 3.1. Deepa noted an unnamed worried engineer in T3. "
+                        "If Priya resigns, Atlas development collapses."
+                    ),
+                    "evidence": [
+                        "Leave_Register.xlsx (5 half-day leaves for P. Nair in Sep 2026)",
+                        "Pulse_Survey.xlsx (Engineering engagement collapsed to 3.1 in Q2)",
+                        "T3 Head of People Call ('one engineer I'm worried about')",
+                        "Email 11.eml (Deepa warning Ananya about engineering pulse crash)"
+                    ],
+                    "recommendation": "Initiate an immediate retention retention check-in with Priya; pair Rahul Verma with her to distribute architecture knowledge."
+                },
+                {
+                    "rank": 3,
+                    "tier": "TOP 3 IMMEDIATE CRITICAL FOCUS",
+                    "title": "Atlas GA Delay & Uncommunicated Stealth Hiring Freeze",
+                    "severity": "HIGH",
+                    "summary": (
+                        "The board was informed two backend engineers were being hired to de-risk Atlas, and Rs. 1.77L was paid to Cohere Recruiting. "
+                        "However, Meera quietly froze REQ-014 and REQ-015 on 12 August to save cash. Atlas missed its 15 September GA launch after August outages."
+                    ),
+                    "evidence": [
+                        "Board_Update_Apr-Jun_2026.pdf ('add two backend engineers to de-risk Atlas')",
+                        "06.eml (Meera pauses REQ-014 & REQ-015 on 12 Aug)",
+                        "Hiring_Tracker.xlsx (Final interviews cancelled 14 Aug)",
+                        "GL_Export_Apr-Sep_2026.xlsx (JV-0902: Emergency contractor Patil Infra Rs. 70,800)"
+                    ],
+                    "recommendation": "Unfreeze REQ-014 immediately; update the board transparently regarding the revised Atlas launch window."
+                },
+                {
+                    "rank": 4,
+                    "tier": "SECONDARY OPERATIONAL WATCHLIST",
+                    "title": "Product Marketing Departure & Launch Collateral Void",
+                    "severity": "MEDIUM",
+                    "summary": (
+                        "Siddharth Mehta (Product Marketing Manager) resigned on 15 September with last day 31 October 2026. "
+                        "His resignation letter cited continuous launch delays and collateral that never reaches customers. "
+                        "With hiring frozen, Atlas will launch without dedicated product marketing."
+                    ),
+                    "evidence": [
+                        "Resignation_Letter_SM.pdf ('clearer launch timelines')",
+                        "Employee_Master.xlsx (VX013 exit date: 2026-10-31)",
+                        "Hiring_Tracker.xlsx (REQ-016 backfill opened 17-Sep)"
+                    ],
+                    "recommendation": "Ensure complete handover of Atlas messaging from Siddharth to Head of Marketing Nikhil Bose before 31 October."
+                },
+                {
+                    "rank": 5,
+                    "tier": "SECONDARY OPERATIONAL WATCHLIST",
+                    "title": "Internal Control Failure in Payroll (Rahul Verma Overpayment)",
+                    "severity": "MEDIUM",
+                    "summary": (
+                        "During Fatima's wedding leave, Karthik Subramanian ran February payroll without prorating new joiner Rahul Verma, "
+                        "paying him a full 28 days for joining on Feb 3. Although Rahul reported this on March 6, no adjustment was made in March."
+                    ),
+                    "evidence": [
+                        "Payroll_Register_Jan-Mar_2026.xlsx (Rahul paid 28 days for joining Feb 3)",
+                        "Email 01.eml, 02.eml, 03.eml"
+                    ],
+                    "recommendation": "Formalize payroll backup procedures and resolve Rahul's outstanding payroll reconciliation."
+                }
+            ]
+
+        # Day 3 Point-in-time view (as of 18 Nov or later)
+        return [
             {
                 "rank": 1,
                 "tier": "TOP 3 IMMEDIATE CRITICAL FOCUS",
@@ -523,7 +641,6 @@ class CockpitEngine:
                 "recommendation": "Re-activate Cohere Recruiting for REQ-014 using the paid advance to hire Atlas routing backend capacity."
             }
         ]
-        return risks
 
 
 def main():

@@ -304,6 +304,13 @@ class EmployeeAgent:
             )
             citation = "Email 02.eml & Payroll_Register_Jan-Mar_2026.xlsx: VX018"
 
+        elif self.emp_id == "VX007" and any(w in q_lower for w in ["late night", "ownership", "09.eml", "talk to vikram"]):
+            response = (
+                "On September 1 at 11:47 PM, I sent an email to Vikram (09.eml) requesting time to discuss Atlas ownership. "
+                "I was exhausted from firefighting alone while being expected to single-handedly build real-time re-routing."
+            )
+            citation = "Email 09.eml & T5 VP Engineering Call"
+
         elif self.emp_id == "VX007" and any(w in q_lower for w in ["atlas", "routing", "delay", "status", "v3"]):
             response = (
                 "Atlas routing engine v3 is feature complete, but reliability under high load has been brutal. "
