@@ -379,6 +379,54 @@ class EmployeeAgent:
             )
             citation = "Email 06.eml & Email 07.eml"
 
+        # === Day 3 Persona Grounding Topics ===
+        elif self.emp_id == "VX012" and any(w in q_lower for w in ["on-call", "oncall", "rota", "outage", "sev1", "patil", "burnout", "incident"]):
+            response = (
+                "August broke me. We had three SEV1 outages on routing-api (INC-201, INC-203, INC-205). "
+                "I was scheduled as both primary and secondary on-call week after week under 'Sneha' and 'Snehal' until I emailed "
+                "Vikram on Aug 24 (08.eml) to pause Atlas performance tickets. We had to hire Patil Infra Services on a monthly "
+                "retainer (Invoice PIS-114: Rs. 1.41L) just to keep on-call covered."
+            )
+            citation = "Incidents_Aug-Oct_2026.xlsx, OnCall_Rota.xlsx, Email 08.eml & Invoice_PIS-114.pdf"
+
+        elif self.emp_id == "VX004" and any(w in q_lower for w in ["december", "december 15", "jira date", "buffer", "september-ish", "deception", "delay"]):
+            response = (
+                "On September 2, I officially changed the Atlas GA release date in Jira to 15 December 2026 after Priya's "
+                "urgent late-night email (09.eml) and the August reliability outages. When I spoke to Ananya on call T5, "
+                "I described it as 'September-ish with buffer' to avoid causing panic before our board milestones."
+            )
+            citation = "Jira_Export_ATLAS.xlsx (Versions sheet), Email 09.eml & T5 Call"
+
+        elif self.emp_id == "VX007" and any(w in q_lower for w in ["late night", "ownership", "09.eml", "talk to vikram"]):
+            response = (
+                "On September 1 at 11:47 PM, I sent an email to Vikram (09.eml) requesting time to discuss Atlas ownership. "
+                "I was exhausted from firefighting alone while being expected to single-handedly build real-time re-routing."
+            )
+            citation = "Email 09.eml & T5 VP Engineering Call"
+
+        elif self.emp_id == "VX013" and any(w in q_lower for w in ["launch kit", "collateral", "july", "deck", "ready"]):
+            response = (
+                "I finished the entire Atlas v1 launch kit back on 21 July (Atlas_Launch_Kit_v1.pdf), including the sales deck, "
+                "draft website page, and 3 customer emails. I emailed Nikhil on 22 July (05.eml) saying everything was ready "
+                "and we just needed a release date from engineering. It sat untouched for months."
+            )
+            citation = "Atlas_Launch_Kit_v1.pdf & Email 05.eml"
+
+        elif self.emp_id == "VX006" and any(w in q_lower for w in ["cro", "reporting", "cold leads", "manoj", "sales"]):
+            response = (
+                "Manoj claims our summit leads were cold, but we delivered 212 registrations. Regarding Ananya's voice note "
+                "about marketing reporting into a new CRO—nobody has discussed this with me or introduced any candidate. "
+                "Re-organizing marketing under an unannounced hire right when Sid is exiting creates unnecessary instability."
+            )
+            citation = "T4 Head of Marketing Call & T6b CEO Voice Note"
+
+        elif self.emp_id == "VX011" and any(w in q_lower for w in ["google ads", "linkedin", "campaign", "search"]):
+            response = (
+                "I run our Google Ads campaigns (~Rs. 80k-90k/month) and LinkedIn brand campaigns. Paid search drives solid inbound "
+                "traffic, but attributing pipeline from events like the Summit requires closer alignment with sales."
+            )
+            citation = "T4 Call & GL_Export_Apr-Sep_2026.xlsx"
+
         # 2. Questions about role / duties
         elif any(w in q_lower for w in ["what do you do", "role", "responsibilities", "job"]):
             response = f"I am {name}, {title} in {dept}. My main focus is {self.data['workload_focus']}"
