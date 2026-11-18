@@ -96,6 +96,25 @@ class CockpitEngine:
                 "status": "ANSWERED"
             }
 
+        # 4b. Jira Atlas Release Date / Vikram Deception query (Day 3 - checked before general Atlas)
+        if any(w in q for w in ["jira release", "december 15", "atlas release date", "vikram date", "actual launch date", "actual jira"]):
+            deception = self.reconciler.detect_vikram_release_deception()
+            return {
+                "question": question,
+                "answer": (
+                    "The sources directly conflict. In call T5, Vikram Menon assured the CEO that Atlas GA is 'on track, "
+                    "maybe a couple weeks buffer, September-ish'. However, Jira system audit records prove that on 2 September 2026, "
+                    "Vikram formally postponed the Atlas GA release date to 15 December 2026 (a 3-month slip)."
+                ),
+                "citations": [
+                    "Jira_Export_ATLAS.xlsx (Versions sheet: Atlas GA Release Date 2026-12-15, Last Changed 2026-09-02 by vikram)",
+                    "T5 VP Engineering Call (Spoken claim: 'September-ish with buffer')"
+                ],
+                "confidence": "HIGH",
+                "status": "REFUSAL_CONTRADICTION",
+                "contradiction_details": deception["conclusion"]
+            }
+
         # 5. Atlas Routing Engine v3 / Product delivery query
         if any(w in q for w in ["atlas", "routing", "version three", "routing engine", "v3"]):
             atlas_info = self.reconciler.detect_atlas_schedule_delay()
@@ -275,6 +294,100 @@ class CockpitEngine:
                 "status": "ANSWERED"
             }
 
+        # === Day 3 Query Handlers ===
+        # 9. Jira Atlas Release Date / Vikram Deception query (Day 3)
+        if any(w in q for w in ["jira release", "december 15", "atlas release date", "vikram date", "actual launch date"]):
+            deception = self.reconciler.detect_vikram_release_deception()
+            return {
+                "question": question,
+                "answer": (
+                    "The sources directly conflict. In call T5, Vikram Menon assured the CEO that Atlas GA is 'on track, "
+                    "maybe a couple weeks buffer, September-ish'. However, Jira system audit records prove that on 2 September 2026, "
+                    "Vikram formally postponed the Atlas GA release date to 15 December 2026 (a 3-month slip)."
+                ),
+                "citations": [
+                    "Jira_Export_ATLAS.xlsx (Versions sheet: Atlas GA Release Date 2026-12-15, Last Changed 2026-09-02 by vikram)",
+                    "T5 VP Engineering Call (Spoken claim: 'September-ish with buffer')"
+                ],
+                "confidence": "HIGH",
+                "status": "REFUSAL_CONTRADICTION",
+                "contradiction_details": deception["conclusion"]
+            }
+
+        # 10. On-call Overload & PagerDuty Incidents query (Day 3)
+        if any(w in q for w in ["on-call overload", "oncall rota", "pagerduty", "sev1", "snehal"]):
+            oncall_info = self.reconciler.detect_oncall_burnout_discrepancy()
+            return {
+                "question": question,
+                "answer": (
+                    "Engineering experienced severe operational overload. PagerDuty logs show three SEV1 outages struck "
+                    "routing-api in August (INC-201, INC-203, INC-205). In the on-call rota, Sneha Kulkarni was assigned as "
+                    "BOTH Primary and Secondary on-call across overlapping shifts under aliases 'Sneha' and 'Snehal'. "
+                    "Veloxa was forced to hire external contractor Patil Infra Services for on-call relief."
+                ),
+                "citations": [
+                    "Incidents_Aug-Oct_2026.xlsx (Three SEV1 outages on routing-api)",
+                    "OnCall_Rota.xlsx (Sneha listed as Primary and Secondary overlapping)",
+                    "08.eml (Sneha tells Vikram she is pausing perf tickets)",
+                    "Invoice_PIS-114.pdf (Baner, Pune: Rs. 1,41,600 September retainer)"
+                ],
+                "confidence": "HIGH",
+                "status": "ANSWERED"
+            }
+
+        # 11. Patil Infra Services invoice query (Day 3)
+        if any(w in q for w in ["patil infra", "pis-114", "contractor retainer", "sre contractor"]):
+            return {
+                "question": question,
+                "answer": (
+                    "Patil Infra Services (Baner Road, Pune) billed Veloxa Rs. 1,41,600 (Invoice PIS-114 dated 01/10/2026, "
+                    "comprising Rs. 1,20,000 monthly retainer + 18% IGST) for on-call SRE support by S. Patil in September 2026. "
+                    "This followed previous invoice PIS-108 for Rs. 70,800 for late August support."
+                ),
+                "citations": [
+                    "Invoice_PIS-114.pdf (Tax Invoice PIS-114 dated 01/10/2026)",
+                    "GL_Export_Apr-Sep_2026.xlsx (Voucher JV-0902: Rs. 70,800)"
+                ],
+                "confidence": "HIGH",
+                "status": "ANSWERED"
+            }
+
+        # 12. Atlas Launch Kit & Collateral query (Day 3)
+        if any(w in q for w in ["launch kit", "atlas collateral", "marketing deck", "unpublished page"]):
+            return {
+                "question": question,
+                "answer": (
+                    "The Atlas v1 launch kit was fully completed by Siddharth Mehta on 21 July 2026 (Atlas_Launch_Kit_v1.pdf). "
+                    "It included a sales launch deck, an unpublished website page, and a 3-part customer email sequence. "
+                    "Siddharth notified Nikhil on 22 July (05.eml) that marketing was ready, but engineering delays stalled release."
+                ),
+                "citations": [
+                    "Atlas_Launch_Kit_v1.pdf (Completed 21 Jul 2026 by Sid)",
+                    "05.eml (Siddharth to Nikhil: 'Launch kit is done, just need a date')",
+                    "T4 Head of Marketing Call ('Sid launch kit ready since July')"
+                ],
+                "confidence": "HIGH",
+                "status": "ANSWERED"
+            }
+
+        # 13. CRO Re-organization / Voice Note T6b query (Day 3)
+        if any(w in q for w in ["cro", "new cro", "marketing report to cro", "voice note t6b"]):
+            return {
+                "question": question,
+                "answer": (
+                    "In Voice Note T6b, the CEO proposed having Marketing report to a new CRO next month. However, records show "
+                    "no CRO has been hired or listed in Keka Hire. With Siddharth exiting on 31 October, Atlas GA delayed to 15 December, "
+                    "and Sales claiming summit leads are cold, a premature reporting re-org threatens to create severe instability."
+                ),
+                "citations": [
+                    "T6b_CEO_Voice_Note.docx ('marketing will report to new CRO')",
+                    "Hiring_Tracker.xlsx (No CRO requisition exists)",
+                    "docs/VOICE_NOTE_RESPONSES.md (Formal response & pushback to T6b)"
+                ],
+                "confidence": "HIGH",
+                "status": "ANSWERED"
+            }
+
         # 9. Generic Fallback: Search Database
         conn = sqlite3.connect(self.db_path)
         cur = conn.cursor()
@@ -326,69 +439,88 @@ class CockpitEngine:
             {
                 "rank": 2,
                 "tier": "TOP 3 IMMEDIATE CRITICAL FOCUS",
-                "title": "Single Point of Failure & Priya Nair Flight Risk",
+                "title": "Atlas GA Delivery Deception (3-Month Delay Concealed from CEO)",
                 "severity": "CRITICAL",
                 "summary": (
-                    "Priya Nair is carrying the entire Atlas routing engine v3 alone. In September, she took 5 afternoon half-day personal leaves, "
-                    "while Engineering Culture Amp engagement plunged to 3.1. Deepa noted an unnamed worried engineer in T3. "
-                    "If Priya resigns, Atlas development collapses."
+                    "VP Engineering Vikram Menon assured the CEO on call T5 that Atlas v3 was 'September-ish with a couple weeks buffer'. "
+                    "However, Jira version audit logs prove Vikram formally pushed the GA release date to 15 December 2026 on 2 September. "
+                    "Executive leadership is making customer and board commitments against a fictitious launch timeline."
                 ),
                 "evidence": [
-                    "Leave_Register.xlsx (5 half-day leaves for P. Nair in Sep 2026)",
-                    "Pulse_Survey.xlsx (Engineering engagement collapsed to 3.1 in Q2)",
-                    "T3 Head of People Call ('one engineer I'm worried about')",
-                    "Email 11.eml (Deepa warning Ananya about engineering pulse crash)"
+                    "Jira_Export_ATLAS.xlsx (Versions sheet: Atlas GA postponed to 2026-12-15 by vikram on 2026-09-02)",
+                    "T5 VP Engineering Call (Spoken claim: 'September-ish with buffer')",
+                    "Atlas_Launch_Kit_v1.pdf (Marketing launch kit ready since 21 July waiting on engineering)"
                 ],
-                "recommendation": "Initiate an immediate retention retention check-in with Priya; pair Rahul Verma with her to distribute architecture knowledge."
+                "recommendation": "Confront Vikram on the December 15 Jira schedule; realign all board and enterprise customer launch expectations."
             },
             {
                 "rank": 3,
                 "tier": "TOP 3 IMMEDIATE CRITICAL FOCUS",
-                "title": "Atlas GA Delay & Uncommunicated Stealth Hiring Freeze",
+                "title": "Engineering On-Call Overload, Outages & SRE Retainer Costs",
                 "severity": "HIGH",
                 "summary": (
-                    "The board was informed two backend engineers were being hired to de-risk Atlas, and Rs. 1.77L was paid to Cohere Recruiting. "
-                    "However, Meera quietly froze REQ-014 and REQ-015 on 12 August to save cash. Atlas missed its 15 September GA launch after August outages."
+                    "Vikram denied overload on call T5, but primary logs reveal an active operational crisis. PagerDuty recorded three SEV1 "
+                    "outages in August, while Sneha Kulkarni was assigned as both Primary and Secondary on-call across overlapping shifts ('Sneha' & 'Snehal'). "
+                    "Veloxa was forced to hire external contractor Patil Infra Services on a monthly retainer (Invoice PIS-114: Rs. 1,41,600)."
                 ),
                 "evidence": [
-                    "Board_Update_Apr-Jun_2026.pdf ('add two backend engineers to de-risk Atlas')",
-                    "06.eml (Meera pauses REQ-014 & REQ-015 on 12 Aug)",
-                    "Hiring_Tracker.xlsx (Final interviews cancelled 14 Aug)",
-                    "GL_Export_Apr-Sep_2026.xlsx (JV-0902: Emergency contractor Patil Infra Rs. 70,800)"
+                    "Incidents_Aug-Oct_2026.xlsx (Three SEV1 outages on routing-api in August)",
+                    "OnCall_Rota.xlsx (Sneha assigned both Primary and Secondary on-call)",
+                    "08.eml (Sneha tells Vikram she is pausing perf tickets)",
+                    "Invoice_PIS-114.pdf (Baner, Pune: Rs. 1,41,600 September retainer)"
                 ],
-                "recommendation": "Unfreeze REQ-014 immediately; update the board transparently regarding the revised Atlas launch window."
+                "recommendation": "Review RDS database lock contention; unfreeze backend hiring (REQ-014) to relieve Sneha and replace emergency contractor spend."
             },
             {
                 "rank": 4,
                 "tier": "SECONDARY OPERATIONAL WATCHLIST",
-                "title": "Product Marketing Departure & Launch Collateral Void",
-                "severity": "MEDIUM",
+                "title": "Priya Nair Flight Risk & Unaddressed Ownership Distress",
+                "severity": "HIGH",
                 "summary": (
-                    "Siddharth Mehta (Product Marketing Manager) resigned on 15 September with last day 31 October 2026. "
-                    "His resignation letter cited continuous launch delays and collateral that never reaches customers. "
-                    "With hiring frozen, Atlas will launch without dedicated product marketing."
+                    "Priya Nair is carrying the core routing engine algorithms alone. In September, she took 5 afternoon half-day leaves (flight risk), "
+                    "while Engineering pulse engagement plummeted to 3.1. On Sept 1 at 23:47, she sent an email (09.eml) requesting to discuss Atlas ownership, "
+                    "which Vikram dismissed on call T5 claiming 'she likes late nights'."
                 ),
                 "evidence": [
-                    "Resignation_Letter_SM.pdf ('clearer launch timelines')",
-                    "Employee_Master.xlsx (VX013 exit date: 2026-10-31)",
-                    "Hiring_Tracker.xlsx (REQ-016 backfill opened 17-Sep)"
+                    "Leave_Register.xlsx (5 half-day leaves for P. Nair in Sep 2026)",
+                    "Pulse_Survey.xlsx (Engineering engagement collapsed to 3.1 in Q2)",
+                    "09.eml (Late-night email requesting ownership talk)",
+                    "T5 VP Engineering Call ('she likes it')"
                 ],
-                "recommendation": "Ensure complete handover of Atlas messaging from Siddharth to Head of Marketing Nikhil Bose before 31 October."
+                "recommendation": "Hold an executive retention 1:1 with Priya immediately; pair Rahul Verma on core routing algorithms to distribute key-person risk."
             },
             {
                 "rank": 5,
                 "tier": "SECONDARY OPERATIONAL WATCHLIST",
-                "title": "Internal Control Failure in Payroll (Rahul Verma Overpayment)",
+                "title": "Sales-Marketing Pipeline Disconnect & Premature CRO Re-org",
                 "severity": "MEDIUM",
                 "summary": (
-                    "During Fatima's wedding leave, Karthik Subramanian ran February payroll without prorating new joiner Rahul Verma, "
-                    "paying him a full 28 days for joining on Feb 3. Although Rahul reported this on March 6, no adjustment was made in March."
+                    "In call T4, Nikhil praised the Logistics Summit as 'our best quarter ever for pipeline', but Sales Lead Manoj Kumar stated "
+                    "the summit leads were cold, despite a Rs. 10.03L event spend. Ananya's proposal in Voice Note T6b to move Marketing under a new CRO "
+                    "without an active hire or job posting risks destabilizing marketing right as Siddharth exits on 31 October."
                 ),
                 "evidence": [
-                    "Payroll_Register_Jan-Mar_2026.xlsx (Rahul paid 28 days for joining Feb 3)",
-                    "Email 01.eml, 02.eml, 03.eml"
+                    "T4 Head of Marketing Call (Manoj: 'summit leads are cold')",
+                    "GL_Export_Apr-Sep_2026.xlsx (JV-0846 & JV-0904: Rs. 10,03,000 Summit spend)",
+                    "T6b_CEO_Voice_Note.docx & docs/VOICE_NOTE_RESPONSES.md"
                 ],
-                "recommendation": "Formalize payroll backup procedures and resolve Rahul's outstanding payroll reconciliation."
+                "recommendation": "Pause marketing re-organization until a CRO is formally hired; establish shared lead qualification criteria between Nikhil and Manoj."
+            },
+            {
+                "rank": 6,
+                "tier": "SECONDARY OPERATIONAL WATCHLIST",
+                "title": "Stealth Hiring Freeze & Wasted Recruiting Advance",
+                "severity": "MEDIUM",
+                "summary": (
+                    "CFO Meera froze backend engineering roles REQ-014 and REQ-015 on 12 August to conserve cash, contradicting the board promise "
+                    "to de-risk Atlas and leaving a Rs. 1.77L advance paid to Cohere Recruiting Partners sitting idle."
+                ),
+                "evidence": [
+                    "06.eml (Meera pauses REQ-014 & REQ-015 on 12 Aug)",
+                    "Hiring_Tracker.xlsx (Final interviews cancelled 14 Aug)",
+                    "GL_Export_Apr-Sep_2026.xlsx (JV-0688: Cohere Recruiting Rs. 1,77,000 advance)"
+                ],
+                "recommendation": "Re-activate Cohere Recruiting for REQ-014 using the paid advance to hire Atlas routing backend capacity."
             }
         ]
         return risks
@@ -398,7 +530,7 @@ def main():
     parser = argparse.ArgumentParser(description="Veloxa CXO Cockpit CLI")
     parser.add_argument("--query", "-q", type=str, help="Question for the CXO Cockpit")
     parser.add_argument("--worry", "-w", action="store_true", help="Display 'What should I worry about?' view")
-    parser.add_argument("--as-of", type=str, default="2026-11-17", help="As-of simulation date (default: 2026-11-17)")
+    parser.add_argument("--as-of", type=str, default="2026-11-18", help="As-of simulation date (default: 2026-11-18)")
 
     args = parser.parse_args()
     engine = CockpitEngine(as_of_date=args.as_of)
