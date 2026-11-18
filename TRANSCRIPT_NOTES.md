@@ -24,6 +24,12 @@ This document records all suspected Automated Speech Recognition (ASR) phonetic 
 | **TN-016** | T3 line 7 | "attrition is about twelve" | ~12% annualized turnover or confusion | In a 19-person startup, 12 people leaving would be 63% turnover. Only 1 planned departure (Siddharth) is documented. 12 refers to either 12% annualized industry benchmark or ~2 people historically. |
 | **TN-017** | T3 line 14 | "twenty-two open roles in April... lost six in August" | Informal headcount wishlist vs 6 Keka reqs | `Hiring_Tracker.xlsx` tracks only 6 total requisitions (REQ-011 to REQ-016). Rohan's "22 roles" is an unapproved pipeline wish-list, not formal job postings. |
 | **TN-018** | T3 line 20 | "one engineer I'm worried about" | Priya Nair (Staff Engineer, VX007) | Deepa refused to name the engineer on the call. Leave register reveals Priya Nair took 5 half-day leaves in September, and engineering engagement collapsed from 3.9 to 3.1. Corroborates severe flight risk. |
+| **TN-019** | T4 line 11 | "Ayesha" | Aisha Khan (VX011) | Listed as Aisha Khan, Performance Marketing Manager, in `Employee_Master.xlsx`. |
+| **TN-020** | T4 line 7 | "one point eight" | Unclear unit (1.8L vs 1.8 Cr) | Nikhil claims half-year marketing spend is "1.8", but General Ledger shows Summit venue and catering alone totaled Rs. 10,03,000, and Google Ads was ~Rs. 5,00,000. |
+| **TN-021** | T5 line 10 | "Snehal" | Sneha Kulkarni (VX012) | ASR mishearing of Sneha Kulkarni. On-call rota erroneously listed her as both 'Sneha' and 'Snehal' across overlapping shifts. |
+| **TN-022** | T5 line 21 | "Con fluence" | Confluence (Atlassian) | Documentation wiki platform used alongside Jira. |
+| **TN-023** | T5 line 14 | "pager duty" | PagerDuty | Cloud incident response platform. |
+| **TN-024** | T5 line 7 | "Board date is still September-ish" | Deceptive status report | Jira ATLAS version export confirms Vikram changed Atlas GA release date to 15 December 2026 on 2 September 2026. |
 
 ---
 
@@ -83,3 +89,27 @@ This document records all suspected Automated Speech Recognition (ASR) phonetic 
 * **Spoken Claim:** In T3, Deepa tells Ananya: *"there is one engineer I'm worried about"*, but refuses to name them on the recording.
 * **Hard Data:** `Leave_Register.xlsx` records that Priya Nair took **five afternoon half-day personal leaves** across September 2026 (03-Sep, 08-Sep, 15-Sep, 17-Sep, 24-Sep). `Pulse_Survey.xlsx` shows Engineering engagement collapsed from 3.9 in Q1 to 3.1 in Q2 (Jul-Sep 2026). Email `11.eml` shows Deepa urgently advising 1:1s with engineering.
 * **Resolution & Defense:** Priya Nair is carrying the entire Atlas routing architecture alone. Her leave pattern strongly indicates offsite job interviews. She is Veloxa's highest-priority flight risk.
+
+### Conflict 8: Vikram's GA Launch Date Deception (T5 Call vs Jira Version History)
+* **Spoken Claim:** In T5, VP Engineering Vikram Menon assures CEO Ananya Rao: *"v3 is on track, maybe a couple of weeks of buffer needed... Board date is still September-ish."*
+* **Hard Data:** In `Jira_Export_ATLAS.xlsx` (`Versions` sheet), the official `Atlas GA` fix version shows:
+  * `Release Date: 2026-12-15`
+  * `Original Release Date: 2026-09-15`
+  * `Last Changed: 2026-09-02` by `vikram`.
+* **Resolution & Defense:** Vikram had already formally pushed the release date in Jira back by a full three months to December 15 on September 2nd, but concealed this from the CEO during the call, claiming it was merely "a couple of weeks buffer".
+
+### Conflict 9: Denial of Engineering Overload vs 24/7 Double On-Call Shifts
+* **Spoken Claim:** In T5, Vikram asserts: *"disputes that anyone is overloaded: 'everyone's busy, that's startups'... Pria has been doing late nights but she likes it."*
+* **Hard Data:**
+  * In `OnCall_Rota.xlsx`, Sneha Kulkarni was assigned as **both Primary and Secondary on-call** across overlapping shifts from 17 August through October (listed as 'Sneha' and 'Snehal').
+  * `Incidents_Aug-Oct_2026.xlsx` proves three SEV1 outages struck `routing-api` in August (`INC-201`, `INC-203`, `INC-205`), all handled by Sneha.
+  * In Email `08.eml`, Sneha warns Vikram: *"Third SEV1 this month. I'm pausing the Atlas perf tickets to stabilise routing-api. The contractor starts on the rota this week."*
+  * `Invoice_PIS-114.pdf` confirms Veloxa had to retain contractor Patil Infra Services for **Rs. 1,41,600** in September to prevent complete system collapse.
+* **Resolution & Defense:** Vikram is actively downplaying a severe operational crisis. Key engineers are experiencing extreme burnout, and external contractor support was essential to maintain uptime.
+
+### Conflict 10: Marketing Summit Pipeline Claim vs Sales Rejection
+* **Spoken Claim:** In T4, Nikhil claims the Logistics Summit was *"our best quarter ever for pipeline"*.
+* **Hard Data:**
+  * In T4, Sales Lead Manoj Kumar explicitly complains that the summit leads are *"cold"*.
+  * General Ledger records show Summit spend totaled **Rs. 10,03,000** for only 212 registrations (~Rs. 4,730 per registered attendee).
+* **Resolution & Defense:** Severe cross-functional disconnect between Sales and Marketing. Marketing declared a vanity victory based on event attendance, while Sales found no qualified pipeline.

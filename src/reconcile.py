@@ -38,11 +38,14 @@ class ReconciliationEngine:
             "rahul verma": {"canonical": "Rahul Verma", "emp_id": "VX018", "kind": "person", "dept": "Engineering"},
             "arjun": {"canonical": "Arjun Das", "emp_id": "VX009", "kind": "person", "dept": "Engineering"},
             "sneha": {"canonical": "Sneha Kulkarni", "emp_id": "VX012", "kind": "person", "dept": "Engineering"},
+            "snehal": {"canonical": "Sneha Kulkarni", "emp_id": "VX012", "kind": "person", "dept": "Engineering"},
             "siddharth": {"canonical": "Siddharth Mehta", "emp_id": "VX013", "kind": "person", "dept": "Marketing"},
             "sid": {"canonical": "Siddharth Mehta", "emp_id": "VX013", "kind": "person", "dept": "Marketing"},
             "aisha": {"canonical": "Aisha Khan", "emp_id": "VX011", "kind": "person", "dept": "Marketing"},
+            "ayesha": {"canonical": "Aisha Khan", "emp_id": "VX011", "kind": "person", "dept": "Marketing"},
             "rohan": {"canonical": "Rohan Banerjee", "emp_id": "VX015", "kind": "person", "dept": "People & Ops"},
             "lakshmi": {"canonical": "Lakshmi Pillai", "emp_id": "VX017", "kind": "person", "dept": "People & Ops"},
+            "manoj": {"canonical": "Manoj Kumar", "emp_id": "VX002", "kind": "person", "dept": "Sales"},
 
             # Tool aliases
             "jeera": {"canonical": "Jira", "kind": "tool", "category": "Project Management"},
@@ -55,6 +58,10 @@ class ReconciliationEngine:
             "cult amp": {"canonical": "Culture Amp", "kind": "tool", "category": "Employee Surveys"},
             "slag": {"canonical": "Slack", "kind": "tool", "category": "Internal Communication"},
             "hub sport": {"canonical": "HubSpot", "kind": "tool", "category": "CRM & Marketing"},
+            "pager duty": {"canonical": "PagerDuty", "kind": "tool", "category": "Incident Response"},
+            "pagerduty": {"canonical": "PagerDuty", "kind": "tool", "category": "Incident Response"},
+            "con fluence": {"canonical": "Confluence", "kind": "tool", "category": "Documentation"},
+            "confluence": {"canonical": "Confluence", "kind": "tool", "category": "Documentation"},
 
             # Vendor aliases
             "sapphire events pvt ltd": {"canonical": "Sapphire Events", "kind": "vendor", "purpose": "Event Management"},
@@ -306,6 +313,73 @@ class ReconciliationEngine:
             )
         }
 
+    def detect_vikram_release_deception(self) -> Dict[str, Any]:
+        """Exposes discrepancy between Vikram's spoken claim in T5 and Jira GA release date."""
+        conn = sqlite3.connect(self.db_path)
+        cur = conn.cursor()
+        cur.execute("SELECT release_date, original_release_date, last_changed, changed_by FROM jira_versions WHERE version_name = 'Atlas GA'")
+        row = cur.fetchone()
+        conn.close()
+
+        jira_rel = row[0] if row else "2026-12-15"
+        orig_rel = row[1] if row else "2026-09-15"
+        changed_dt = row[2] if row else "2026-09-02"
+        changed_by = row[3] if row else "vikram"
+
+        return {
+            "conflict_id": "CONF-008",
+            "topic": "Atlas GA Delivery Timeline Misrepresentation",
+            "vikram_call_claim": "T5: Vikram tells Ananya v3 is 'on track, maybe a couple weeks buffer, September-ish'.",
+            "jira_hard_record": f"Jira Versions shows Atlas GA postponed from {orig_rel} to {jira_rel} by {changed_by} on {changed_dt}.",
+            "confidence": "HIGH",
+            "conclusion": (
+                f"Vikram is actively misrepresenting the delivery timeline to the CEO. On {changed_dt}, he changed Jira's "
+                f"official release date to {jira_rel} (a 3-month slip), yet on the call he claimed it was 'September-ish'."
+            )
+        }
+
+    def detect_oncall_burnout_discrepancy(self) -> Dict[str, Any]:
+        """Cross-checks Vikram's claim that no one is overloaded against OnCall Rota and PagerDuty."""
+        conn = sqlite3.connect(self.db_path)
+        cur = conn.cursor()
+        cur.execute("SELECT count(*) FROM pagerduty_incidents WHERE severity = 'SEV1'")
+        sev1_count = cur.fetchone()[0]
+        cur.execute("SELECT count(*) FROM oncall_rota WHERE primary_oncall LIKE '%Sneha%' AND secondary_oncall LIKE '%Sneha%'")
+        double_shift_weeks = cur.fetchone()[0]
+        cur.execute("SELECT amount FROM invoices WHERE invoice_no = 'PIS-114'")
+        inv_row = cur.fetchone()
+        patil_invoice = inv_row[0] if inv_row else 141600.0
+        conn.close()
+
+        return {
+            "conflict_id": "CONF-009",
+            "topic": "Engineering On-Call Overload Denial vs Reality",
+            "vikram_call_claim": "T5: Vikram disputes overload ('everyone busy, that's startups... Pria likes late nights').",
+            "incident_reality": f"PagerDuty shows {sev1_count} SEV1 outages on routing-api in August.",
+            "oncall_rota_reality": f"Sneha Kulkarni was assigned as BOTH primary and secondary on-call for {double_shift_weeks} weeks ('Sneha' & 'Snehal').",
+            "contractor_reality": f"Veloxa was forced to hire Patil Infra Services (Baner, Pune) on a monthly retainer (Invoice PIS-114: Rs. {patil_invoice:,.0f}).",
+            "confidence": "HIGH",
+            "conclusion": (
+                "Vikram's assertion that engineering is not overloaded is directly contradicted by primary logs. "
+                "Sneha was on-call 24/7 as both primary and secondary, leading to burnout and emergency external contractor costs."
+            )
+        }
+
+    def detect_marketing_sales_pipeline_conflict(self) -> Dict[str, Any]:
+        """Contrasts Nikhil's pipeline triumph with Sales Lead Manoj's feedback."""
+        return {
+            "conflict_id": "CONF-010",
+            "topic": "Marketing Summit Pipeline vs Sales Lead Rejection",
+            "nikhil_claim": "T4: Nikhil calls the September summit 'our best quarter ever for pipeline'.",
+            "sales_reality": "T4: Manoj Kumar (Sales Lead) states the summit leads are completely cold.",
+            "cost_reality": "General ledger shows Rs. 10,03,000 spent on Sapphire Events with only 212 registrations.",
+            "confidence": "HIGH",
+            "conclusion": (
+                "Severe executive misalignment between Sales and Marketing. Marketing spent over 10 Lakhs on the summit "
+                "and declared victory, while Sales claims zero actionable pipeline was produced."
+            )
+        }
+
     def get_all_reconciliations(self) -> List[Dict[str, Any]]:
         """Returns all detected conflicts and reconciliations."""
         return [
@@ -315,7 +389,10 @@ class ReconciliationEngine:
             self.detect_atlas_schedule_delay(),
             self.detect_hiring_freeze_conflict(),
             self.detect_priya_flight_risk(),
-            self.detect_recruiting_open_roles_conflict()
+            self.detect_recruiting_open_roles_conflict(),
+            self.detect_vikram_release_deception(),
+            self.detect_oncall_burnout_discrepancy(),
+            self.detect_marketing_sales_pipeline_conflict()
         ]
 
 

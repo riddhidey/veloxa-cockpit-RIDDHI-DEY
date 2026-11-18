@@ -64,3 +64,14 @@ This log documents technical, architectural, and business choices made where mul
   3. *Triangulate Cross-Source Signals:* Cross-reference the engineering department records across the Leave Register (identifying Priya Nair's 5 afternoon half-days in September), Pulse Surveys (identifying the Q2 score crash to 3.1 with 1 abstention), and Email 11 (Deepa urgently requesting 1:1s with engineering).
 * **Decision:** We chose **Option 3 (Triangulate Cross-Source Signals)**. The Cockpit attributes the flight risk to Priya Nair, but explicitly presents the chain of circumstantial evidence: T3 call clue + September leave spikes + Culture Amp engagement drop.
 * **Defense:** An executive cockpit must connect cross-functional dots to protect the company from losing its sole critical systems architect.
+
+---
+
+### D-007: Exposing Leadership Timeline Discrepancies (Jira Release Date vs Executive Spoken Statements)
+* **Context:** In call T5, VP Engineering Vikram Menon assures CEO Ananya Rao that Atlas GA is *"on track, maybe a couple of weeks buffer needed, September-ish"*. However, `Jira_Export_ATLAS.xlsx` shows Vikram formally changed the release date to **15 December 2026** on September 2nd.
+* **Alternatives Considered:**
+  1. *Believe the VP Engineering:* Report "September-ish with buffer" as the official forecast.
+  2. *Take an average:* Report mid-October or November.
+  3. *Expose the Discrepancy with Hard System Logs:* Report that the project management system of record (Jira) is configured for 15 December 2026 (a 3-month slip), directly contradicting the VP's verbal reassurance.
+* **Decision:** We chose **Option 3 (Expose the Discrepancy)**. The Cockpit cites Jira version audit history (`changed_by: vikram`, `last_changed: 2026-09-02`) and highlights the executive reporting gap.
+* **Defense:** The purpose of an executive cockpit is to eliminate executive blindspots and protect the CEO from leadership optimism or deception before board and customer commitments are made.
