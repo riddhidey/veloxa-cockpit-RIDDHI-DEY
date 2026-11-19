@@ -40,6 +40,9 @@ You can also ask specific questions using the `--query` flag:
 # Query the Jira Atlas GA release date deception (triggers contradiction refusal)
 python -m src.cockpit --query "What is the actual Jira release date for Atlas GA?"
 
+# Query SRE on-call overload & contractor costs
+python -m src.cockpit --query "How much did we pay Patil Infra Services?"
+
 # Query the stealth hiring freeze
 python -m src.cockpit --query "What is happening with the backend hiring freeze?"
 
@@ -57,6 +60,16 @@ You can interview any of the 14 employees grounded in their department data:
 # List all 14 personas and run sample interviews
 python -m src.agents
 ```
+
+---
+
+## Daily Simulation Milestones & Discoveries
+
+| Day | Release Pack & Calls | Key Grounded Discoveries & Deliverables | Status |
+| :--- | :--- | :--- | :--- |
+| **Day 1** (Mon 16 Nov) | T1 (CEO kickoff), T2 (CFO call), HRMS, GL export, payroll register, board updates | • Ingested 19 employees, general ledger, and payroll into SQLite.<br>• Reconciled headcount: ASR "180" vs hard record **19 employees**.<br>• Exposed burn rate conflict: CFO claimed 2.2L vs GL/Board **Rs. 44L-46L**.<br>• Uncovered Rahul Verma Feb payroll overpayment (full month vs Feb 3 join).<br>• **Milestone:** Committed [ARCHITECTURE.md](ARCHITECTURE.md) and 5 governance logs. | **Completed** |
+| **Day 2** (Tue 17 Nov) | T3 (Head of People), T6a (CEO voice note), Leave register, pulse surveys, resignation letter | • Unmasked Deepa's unnamed "worried engineer" as **Priya Nair** (5 afternoon leaves in Sept, Culture Amp pulse crashed from 3.9 to 3.1).<br>• Detected stealth hiring freeze: Meera paused `REQ-014` & `REQ-015` on 12-Aug after paying Rs. 1.77L advance to Cohere.<br>• Ingested Siddharth Mehta resignation letter (exit 31-Oct citing slipping dates).<br>• **Milestone:** Committed response to **CEO Voice Note T6a** in [docs/VOICE_NOTE_RESPONSES.md](docs/VOICE_NOTE_RESPONSES.md) (implemented auto-launch radar, pushed back on 3-item limit). | **Completed** |
+| **Day 3** (Wed 18 Nov) | T4 (Head of Marketing), T5 (VP Engineering), T6b (CEO voice note), Jira export, PagerDuty, on-call rota, invoices | • **Exposed Vikram Menon's Deception:** Jira audit logs prove Vikram moved Atlas GA to **15 December 2026** on 2-Sep, while telling CEO it was "September-ish buffer".<br>• **Uncovered SRE On-Call Crisis:** Sneha Kulkarni was assigned double on-call 24/7 as both Primary and Secondary ('Sneha' & 'Snehal') during 3 August SEV1 outages, forcing emergency Rs. 1,41,600 monthly retainer for contractor Patil Infra Services (`PIS-114`).<br>• Identified Sales vs Marketing pipeline conflict (Manoj rejected summit leads as "cold" despite Rs. 10.03L event spend).<br>• **Milestone:** Committed response to **CEO Voice Note T6b** in [docs/VOICE_NOTE_RESPONSES.md](docs/VOICE_NOTE_RESPONSES.md) (supported dynamic org modeling, pushed back against premature CRO re-org). | **Completed** |
 
 ---
 
