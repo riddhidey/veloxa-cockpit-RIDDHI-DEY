@@ -446,7 +446,7 @@ class EmployeeAgent:
         elif self.emp_id == "VX005" and any(w in q_lower for w in ["slag", "slack", "surveillance", "spy", "spying", "reading messages", "did you say"]):
             response = (
                 "I never told Ananya that reading employees' private Slack messages is fine. As Head of People, workplace surveillance "
-                "violates employee trust and basic labor ethics. We gauge sentiment through anonymous pulse surveys and open 1:1s, "
+                "destroys psychological safety, employee trust, and basic labor ethics. We gauge sentiment through anonymous pulse surveys and open 1:1s, "
                 "not covert chat snooping."
             )
             citation = "T6c CEO Voice Note, T3 Call & People Ops Policy Framework"

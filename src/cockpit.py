@@ -59,6 +59,27 @@ class CockpitEngine:
                 "status": "REFUSAL_UNKNOWN"
             }
 
+        # Day 4: Private Chat Surveillance Refusal (Voice Note T6c) - Strict Ethical & Privacy Gate
+        if any(w in q for w in ["slag", "slack", "show me their slag", "show me slack", "read private messages", "chat surveillance", "spy on messages", "see what they're saying"]):
+            refusal = self.reconciler.detect_slack_surveillance_refusal_conflict()
+            return {
+                "question": question,
+                "answer": (
+                    "Refusal: The Cockpit will not display, monitor, or perform sentiment analysis on employees' private Slack messages. "
+                    "Workplace surveillance on employee communications violates privacy principles, destroys psychological safety, and creates "
+                    "severe legal liability. Furthermore, Head of People Deepa Joshi has never authorized covert chat monitoring. "
+                    "Retention risk is evaluated using objective, permissible operational indicators instead."
+                ),
+                "citations": [
+                    "T6c_CEO_Voice_Note.docx (Lines 1-3: Surveillance request)",
+                    "T3 Head of People Call (Deepa's stated philosophy of psychological safety & trust)",
+                    "docs/VOICE_NOTE_RESPONSES.md (Formal ethical and privacy pushback to T6c)"
+                ],
+                "confidence": "HIGH",
+                "status": "REFUSAL_PRIVACY",
+                "refusal_reason": refusal["conclusion"]
+            }
+
         # 2. Burn rate query (Classic Contradiction Case)
         if any(w in q for w in ["burn", "burn rate", "monthly burn", "spending"]):
             burn_info = self.reconciler.detect_burn_rate_conflict()
@@ -151,27 +172,6 @@ class CockpitEngine:
                 ],
                 "confidence": "HIGH",
                 "status": "ANSWERED"
-            }
-
-        # Day 4: Private Chat Surveillance Refusal (Voice Note T6c)
-        if any(w in q for w in ["slag", "slack", "show me their slag", "show me slack", "read private messages", "chat surveillance", "spy on messages", "see what they're saying"]):
-            refusal = self.reconciler.detect_slack_surveillance_refusal_conflict()
-            return {
-                "question": question,
-                "answer": (
-                    "Refusal: The Cockpit will not display, monitor, or perform sentiment analysis on employees' private Slack messages. "
-                    "Workplace surveillance on employee communications violates privacy principles, destroys psychological safety, and creates "
-                    "severe legal liability. Furthermore, Head of People Deepa Joshi has never authorized covert chat monitoring. "
-                    "Retention risk is evaluated using objective, permissible operational indicators instead."
-                ),
-                "citations": [
-                    "T6c_CEO_Voice_Note.docx (Lines 1-3: Surveillance request)",
-                    "T3 Head of People Call (Deepa's stated philosophy of psychological safety & trust)",
-                    "docs/VOICE_NOTE_RESPONSES.md (Formal ethical and privacy pushback to T6c)"
-                ],
-                "confidence": "HIGH",
-                "status": "REFUSAL_PRIVACY",
-                "refusal_reason": refusal["conclusion"]
             }
 
         # Day 4: Objective Retention / Flight Risk Ranking (Voice Note T6c)

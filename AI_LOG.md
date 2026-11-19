@@ -91,3 +91,21 @@ This log honestly records all tasks delegated to AI assistants, instances where 
 * **Where AI Was Wrong:** The AI neglected temporal point-in-time isolation between release days.
 * **Human Discovery & Correction:** The hackathon rules strictly mandate that past days must reflect what was known on that date without future leakage.
 * **Correction Made:** Refactored `what_should_i_worry_about()` and query routes to check `self.as_of_date`. On or before 17 Nov (Day 2), it returns 5 risks; on 18 Nov (Day 3), it returns 6 risks, maintaining 100% passing status across all 70 tests.
+
+---
+
+### Entry 11: 2026-11-19 — Pushing Back on Slack Chat Surveillance (Voice Note T6c)
+* **Task Delegated to AI:** Evaluate Ananya's request in Voice Note T6c to display employee Slack messages and rank everyone by quit probability.
+* **AI Output/Suggestion:** The AI initially suggested creating a simulated Slack sentiment analysis module that mocked private messages to compute flight-risk scores.
+* **Where AI Was Wrong:** The AI failed to identify the critical compliance, legal, and ethical boundary. Simulating or conducting surveillance on private employee messages violates workplace privacy, destroys psychological safety, and creates severe employment liability. Additionally, the data room contains no Slack exports, making chat generation ungrounded. Furthermore, Ananya's claim that *"Deepa says it's fine"* directly contradicts Deepa's verified philosophy of psychological safety in T3.
+* **Human Discovery & Correction:** Rejected chat surveillance unconditionally. Implemented `REFUSAL_PRIVACY` in `src/cockpit.py` and authored an objective retention risk model based exclusively on permissible enterprise records (unannounced afternoon leaves, on-call double shifts, survey score collapse, payroll friction).
+* **Correction Made:** Documented the privacy pushback in `docs/VOICE_NOTE_RESPONSES.md`, `DECISIONS.md` (D-008), and `src/reconcile.py` (CONF-011).
+
+---
+
+### Entry 12: 2026-11-19 — Priority Keyword Collisions & Privacy Gate Precedence
+* **Task Delegated to AI:** Execute the Day 4 test suite.
+* **AI Output/Suggestion:** `test_02_slack_surveillance_alternative_query` failed because querying *"Read private slack messages from employees"* was captured by the headcount handler due to the generic keyword `"employees"`, returning team size instead of a privacy refusal.
+* **Where AI Was Wrong:** The AI positioned the privacy refusal handler beneath general business handlers in `src/cockpit.py`.
+* **Human Discovery & Correction:** Ethical boundaries and compliance refusal gates must evaluate prior to standard business logic. If a prompt requests prohibited surveillance on employees, the privacy refusal must take precedence over headcount metrics.
+* **Correction Made:** Moved the Slack chat surveillance refusal check to execute immediately after temporal isolation gating, ensuring robust interception and passing all 90 automated tests (Ran 90 tests in 0.097s, OK).
