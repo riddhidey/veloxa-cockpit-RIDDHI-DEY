@@ -434,6 +434,31 @@ class EmployeeAgent:
             )
             citation = "T4 Call & GL_Export_Apr-Sep_2026.xlsx"
 
+        # === Day 4 Persona Grounding Topics ===
+        elif self.emp_id == "VX007" and any(w in q_lower for w in ["resign", "resigned", "resignation", "notice period", "quit", "leaving"]):
+            response = (
+                "I formally submitted my resignation on the morning of 19 November 2026. My notice period is 60 days (two months), "
+                "putting my final departure in mid-January 2027. I have been shouldering 80%+ of the Atlas routing codebase completely alone "
+                "while leadership froze the promised backend backfills in August. I can no longer sacrifice my health for impossible schedules."
+            )
+            citation = "T6d CEO Voice Note, Employee_Master.xlsx: VX007 & git_log.csv"
+
+        elif self.emp_id == "VX005" and any(w in q_lower for w in ["slag", "slack", "surveillance", "spy", "spying", "reading messages", "did you say"]):
+            response = (
+                "I never told Ananya that reading employees' private Slack messages is fine. As Head of People, workplace surveillance "
+                "violates employee trust and basic labor ethics. We gauge sentiment through anonymous pulse surveys and open 1:1s, "
+                "not covert chat snooping."
+            )
+            citation = "T6c CEO Voice Note, T3 Call & People Ops Policy Framework"
+
+        elif self.emp_id == "VX004" and any(w in q_lower for w in ["priya resign", "priya's resign", "priya resigned", "priya resignation", "board", "version 3 impact", "version three impact"]):
+            response = (
+                "Priya's resignation this morning is an absolute disaster for Atlas GA. She built the routing mathematics from scratch. "
+                "With REQ-014 and REQ-015 frozen since August, nobody on our team can step in. I have to tell Ananya that Dec 15 is off the table "
+                "and we need to re-baseline for Q1 2027 while hiring emergency senior contractors."
+            )
+            citation = "T6d CEO Voice Note, git_log.csv & Jira_Export_ATLAS.xlsx"
+
         # 2. Questions about role / duties
         elif any(w in q_lower for w in ["what do you do", "role", "responsibilities", "job"]):
             response = f"I am {name}, {title} in {dept}. My main focus is {self.data['workload_focus']}"

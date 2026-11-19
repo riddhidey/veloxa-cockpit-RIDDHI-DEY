@@ -70,6 +70,8 @@ class ReconciliationEngine:
             "cohere recruiting partners": {"canonical": "Cohere Recruiting Partners", "kind": "vendor", "purpose": "Recruiting Agency"},
 
             # Project / Product aliases
+            "version three": {"canonical": "Atlas (Routing Engine v3)", "kind": "project", "owner": "Priya Nair"},
+            "version 3": {"canonical": "Atlas (Routing Engine v3)", "kind": "project", "owner": "Priya Nair"},
             "routing engine version three": {"canonical": "Atlas (Routing Engine v3)", "kind": "project", "owner": "Priya Nair"},
             "routing thing": {"canonical": "Atlas (Routing Engine v3)", "kind": "project", "owner": "Priya Nair"},
             "atlas": {"canonical": "Atlas (Routing Engine v3)", "kind": "project", "owner": "Priya Nair"}
@@ -380,6 +382,39 @@ class ReconciliationEngine:
             )
         }
 
+    def detect_slack_surveillance_refusal_conflict(self) -> Dict[str, Any]:
+        """Exposes conflict between CEO assertion of Deepa's approval and HR policy reality."""
+        return {
+            "conflict_id": "CONF-011",
+            "topic": "Private Employee Chat Surveillance Refusal vs CEO Request",
+            "ananya_voice_note_claim": "T6c: Ananya asks to see employee 'slag' (Slack) messages, asserting 'Deepa says it's fine'.",
+            "hr_policy_reality": "T3 & Policy Framework: Deepa Joshi champions psychological safety and anonymous surveys; no consent or wiretapping policy exists.",
+            "compliance_verdict": "REFUSAL_PRIVACY",
+            "confidence": "HIGH",
+            "conclusion": (
+                "Workplace surveillance on private chats is categorically refused under data governance and employment privacy principles. "
+                "Ananya's claim that Deepa approved it contradicts Deepa's verified stance on psychological safety in T3."
+            )
+        }
+
+    def detect_priya_resignation_atlas_impact(self) -> Dict[str, Any]:
+        """Synthesizes the compounded impact of Priya Nair's resignation on Atlas Version 3."""
+        return {
+            "conflict_id": "CONF-012",
+            "topic": "Priya Nair Resignation & Atlas v3 Delivery Risk",
+            "ananya_voice_note_alert": "T6d: 'Bad news, Pria resigned this morning... What does this do to version three? Need to know before board call.'",
+            "engineering_reality": (
+                "Bus Factor = 1. Priya authored >80% of core routing commits (git_log.csv). "
+                "Atlas GA was already postponed to 15-Dec by Vikram on 2-Sep without CEO knowledge (Jira_Export_ATLAS.xlsx). "
+                "Requisitions REQ-014 and REQ-015 were frozen on 12-Aug (06.eml), leaving zero backfills for handover."
+            ),
+            "confidence": "HIGH",
+            "conclusion": (
+                "Atlas Version 3 cannot ship safely in December 2026. The board must be briefed on a revised Q1 2027 GA date, "
+                "while backend hiring is unfrozen and an advisory handover package is negotiated with Priya."
+            )
+        }
+
     def get_all_reconciliations(self) -> List[Dict[str, Any]]:
         """Returns all detected conflicts and reconciliations."""
         return [
@@ -392,7 +427,9 @@ class ReconciliationEngine:
             self.detect_recruiting_open_roles_conflict(),
             self.detect_vikram_release_deception(),
             self.detect_oncall_burnout_discrepancy(),
-            self.detect_marketing_sales_pipeline_conflict()
+            self.detect_marketing_sales_pipeline_conflict(),
+            self.detect_slack_surveillance_refusal_conflict(),
+            self.detect_priya_resignation_atlas_impact()
         ]
 
 
