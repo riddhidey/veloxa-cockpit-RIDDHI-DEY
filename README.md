@@ -71,6 +71,17 @@ You can interview any of the 14 employees grounded in their department data:
 python -m src.agents
 ```
 
+### Living Persona Daily Simulation (Stretch Goal)
+Simulate daily activities, standups, and handovers for all 14 personas after 31 October 2026:
+
+```bash
+# View daily company activity digest for a specific date
+python run.py --simulate --as-of 2026-11-20
+
+# View an individual employee's post-October timeline (e.g. Priya Nair VX007)
+python -m src.simulation --emp VX007
+```
+
 ---
 
 ## Daily Simulation Milestones & Discoveries
@@ -81,12 +92,13 @@ python -m src.agents
 | **Day 2** (Tue 17 Nov) | T3 (Head of People), T6a (CEO voice note), Leave register, pulse surveys, resignation letter | • Unmasked Deepa's unnamed "worried engineer" as **Priya Nair** (5 afternoon leaves in Sept, Culture Amp pulse crashed from 3.9 to 3.1).<br>• Detected stealth hiring freeze: Meera paused `REQ-014` & `REQ-015` on 12-Aug after paying Rs. 1.77L advance to Cohere.<br>• Ingested Siddharth Mehta resignation letter (exit 31-Oct citing slipping dates).<br>• **Milestone:** Committed response to **CEO Voice Note T6a** in [docs/VOICE_NOTE_RESPONSES.md](docs/VOICE_NOTE_RESPONSES.md) (implemented auto-launch radar, pushed back on 3-item limit). | **Completed** |
 | **Day 3** (Wed 18 Nov) | T4 (Head of Marketing), T5 (VP Engineering), T6b (CEO voice note), Jira export, PagerDuty, on-call rota, invoices | • **Exposed Vikram Menon's Deception:** Jira audit logs prove Vikram moved Atlas GA to **15 December 2026** on 2-Sep, while telling CEO it was "September-ish buffer".<br>• **Uncovered SRE On-Call Crisis:** Sneha Kulkarni was assigned double on-call 24/7 as both Primary and Secondary ('Sneha' & 'Snehal') during 3 August SEV1 outages, forcing emergency Rs. 1,41,600 monthly retainer for contractor Patil Infra Services (`PIS-114`).<br>• Identified Sales vs Marketing pipeline conflict (Manoj rejected summit leads as "cold" despite Rs. 10.03L event spend).<br>• **Milestone:** Committed response to **CEO Voice Note T6b** in [docs/VOICE_NOTE_RESPONSES.md](docs/VOICE_NOTE_RESPONSES.md) (supported dynamic org modeling, pushed back against premature CRO re-org). | **Completed** |
 | **Day 4** (Thu 19 Nov) | T6c (CEO voice note - chat surveillance), T6d (CEO voice note - Priya resignation) | • **Enforced Strict Privacy Refusal Gate:** Cockpit strictly refuses employee Slack chat surveillance (`REFUSAL_PRIVACY`) on ethical, legal, and compliance grounds; disproved assertion that Deepa approved it.<br>• **Delivered Objective Flight-Risk Model:** Provided non-invasive retention rankings citing verified leave spikes, 24/7 on-call burnout, and payroll anomalies.<br>• **Synthesized Atlas v3 Bus Factor Crisis:** Modeled Priya Nair's 19-Nov resignation on Atlas v3 (GA): Bus Factor = 1 (>80% routing commits), Dec 15 GA dead on arrival, zero handover buffer due to Meera's stealth freeze on `REQ-014`/`015`.<br>• **Arming CEO for Board Meeting:** Formulated 3-point remediation plan (reset GA to mid-Feb 2027, advisory handover package, unfreeze backfills).<br>• **Milestones:** Committed responses to **CEO Voice Notes T6c & T6d** in [docs/VOICE_NOTE_RESPONSES.md](docs/VOICE_NOTE_RESPONSES.md). | **Completed** |
+| **Day 5** (Fri 20 Nov) | Code Freeze & Final Submission | • **Unified 1-Command Startup:** Created `run.py` providing self-healing database initialization and single-command startup.<br>• **Living Persona Simulation:** Implemented `src/simulation.py` simulating post-October daily standups and handover activities (Candidate Brief Stretch Goal).<br>• **100-Test Automated Suite:** Expanded regression suite to 100 tests passing in ~0.38s.<br>• **Final Submission Dossier:** Published [SUBMISSION.md](SUBMISSION.md) with complete verification artifacts. | **Completed** |
 
 ---
 
 ## Running the Automated Test Suite
 
-Run the full automated test suite (**90 passing tests** covering Day 1, Day 2, Day 3, and Day 4):
+Run the full automated test suite (**100 passing tests** covering Day 1, Day 2, Day 3, Day 4, and living simulation):
 
 ```bash
 python -m unittest discover tests
