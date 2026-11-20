@@ -18,19 +18,28 @@ The **Veloxa CXO Cockpit** solves this by providing:
 
 ## Setup & Running the Project
 
-Run the following commands from the repository root to install dependencies, ingest all data, initialize the SQLite database, and launch the cockpit:
+### ⚡ 1-Command Master Startup (Recommended)
+You can run the entire system — self-healing database check, data ingestion across Days 1–4, and launching the Executive Risk Radar — in **one command**:
 
 ```bash
 # 1. Install dependencies
 pip install -r requirements.txt
 
-# 2. Ingest Day 1, Day 2, Day 3 & Day 4 data into local SQLite database (veloxa.db)
+# 2. Launch Cockpit (Auto-populates SQLite database & opens executive radar)
+python run.py
+```
+
+### Manual Step-by-Step Setup
+Alternatively, you can run each ingestion pipeline individually:
+
+```bash
+# Ingest Day 1, Day 2, Day 3 & Day 4 data into local SQLite database (veloxa.db)
 python -m src.ingest_day1
 python -m src.ingest_day2
 python -m src.ingest_day3
 python -m src.ingest_day4
 
-# 3. Launch the Cockpit (Auto-launches Executive Radar per CEO Voice Note T6a)
+# Launch the Cockpit (Auto-launches Executive Radar per CEO Voice Note T6a)
 python -m src.cockpit
 ```
 
@@ -116,39 +125,47 @@ pytest tests/
 
 ```
 veloxa-cockpit-[name]/
+├── run.py                          # Unified 1-command startup, self-healing DB check & CLI
+├── SUBMISSION.md                   # Final submission dossier & evaluator guide
 ├── ARCHITECTURE.md                 # Complete system architecture and data model
-├── ASSUMPTIONS.md                  # Log of all persona and domain assumptions
-├── TRANSCRIPT_NOTES.md             # ASR phonetic errors and cross-source contradictions
-├── DECISIONS.md                    # Defensible design and engineering decisions
-├── AI_LOG.md                       # Record of AI usage, mistakes caught, and human edits
-├── README.md                       # Project overview and setup instructions
-├── requirements.txt                # Python dependencies
+├── ASSUMPTIONS.md                  # Log of 37 persona and domain assumptions
+├── TRANSCRIPT_NOTES.md             # 26 ASR phonetic errors and 12 source contradictions
+├── DECISIONS.md                    # 9 defensible design choices and trade-off rationales
+├── AI_LOG.md                       # 12 audit entries of AI usage, errors caught, and edits
+├── README.md                       # Project overview, milestone table, and setup guide
+├── requirements.txt                # Python dependencies (openpyxl, pypdf)
 ├── docs/
-│   └── VOICE_NOTE_RESPONSES.md     # Written responses & pushback to CEO voice notes (T6a, T6b)
+│   └── VOICE_NOTE_RESPONSES.md     # Written responses & pushbacks to CEO voice notes (T6a–T6d)
 ├── data/
 │   ├── day1/                       # Day 1 Data room & transcripts (T1, T2)
 │   ├── day2/                       # Day 2 HR, surveys, emails, and transcripts (T3, T6a)
-│   └── day3/                       # Day 3 Engineering Jira, incidents, rotas, and transcripts (T4, T5, T6b)
+│   ├── day3/                       # Day 3 Engineering Jira, incidents, rotas, invoices (T4, T5, T6b)
+│   └── day4/                       # Day 4 Transcripts (T6c, T6d)
 ├── src/
 │   ├── ingest_day1.py              # Day 1 ingestion parser & SQLite builder
 │   ├── ingest_day2.py              # Day 2 ingestion parser for hiring, leave, pulse
-│   ├── ingest_day3.py              # Day 3 ingestion parser for Jira, incidents, rotas
+│   ├── ingest_day3.py              # Day 3 ingestion parser for Jira, incidents, rotas, invoices
+│   ├── ingest_day4.py              # Day 4 ingestion parser for CEO voice notes T6c and T6d
 │   ├── reconcile.py                # Entity resolution, conflict & flight risk detection
 │   ├── agents.py                   # 14 grounded employee persona agents
-│   └── cockpit.py                  # CXO Q&A engine & auto-launch worry radar CLI
+│   ├── cockpit.py                  # CXO Q&A engine, privacy refusal gates & auto-launch radar
+│   └── simulation.py               # Post-October living persona simulation engine (Stretch Goal)
 └── tests/
     ├── test_cockpit_day1.py        # Day 1 test suite (28 tests)
     ├── test_cockpit_day2.py        # Day 2 test suite (20 tests)
-    └── test_cockpit_day3.py        # Day 3 test suite (22 tests)
+    ├── test_cockpit_day3.py        # Day 3 test suite (22 tests)
+    ├── test_cockpit_day4.py        # Day 4 test suite (20 tests)
+    └── test_simulation.py          # Living persona simulation test suite (10 tests)
 ```
 
 ---
 
 ## Governance & Milestone Integrity Logs
 
-- [ARCHITECTURE.md](ARCHITECTURE.md) - System architecture, data flow, agent design.
-- [docs/VOICE_NOTE_RESPONSES.md](docs/VOICE_NOTE_RESPONSES.md) - Formal responses to CEO voice notes (T6a, T6b pushback & strategic rationale).
-- [ASSUMPTIONS.md](ASSUMPTIONS.md) - Assumption log with confidence and invalidation criteria.
-- [TRANSCRIPT_NOTES.md](TRANSCRIPT_NOTES.md) - Speech-to-text mishearings and source contradictions.
-- [DECISIONS.md](DECISIONS.md) - Technical trade-offs and rationale.
-- [AI_LOG.md](AI_LOG.md) - AI collaboration audit trail.
+- [SUBMISSION.md](SUBMISSION.md) — Comprehensive submission dossier, reviewer quickstart & verification guide.
+- [ARCHITECTURE.md](ARCHITECTURE.md) — System architecture, data flow diagram, schema design & temporal gating.
+- [docs/VOICE_NOTE_RESPONSES.md](docs/VOICE_NOTE_RESPONSES.md) — Written responses and pushbacks to CEO voice notes (T6a, T6b, T6c, T6d).
+- [ASSUMPTIONS.md](ASSUMPTIONS.md) — 37 structured assumptions with confidence ratings and falsification criteria.
+- [TRANSCRIPT_NOTES.md](TRANSCRIPT_NOTES.md) — 26 ASR phonetic mishearings and 12 cross-source contradiction resolutions.
+- [DECISIONS.md](DECISIONS.md) — 9 architectural choices defended against alternatives.
+- [AI_LOG.md](AI_LOG.md) — 12 audit entries documenting AI assistance, hallucinations caught, and human corrections.
