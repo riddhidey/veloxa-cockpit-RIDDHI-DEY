@@ -115,8 +115,9 @@ def main():
     )
     parser.add_argument("--query", "-q", type=str, help="Ask an executive question to the CXO Cockpit")
     parser.add_argument("--radar", "-r", action="store_true", help="Display the 'What should I worry about?' executive radar")
-    parser.add_argument("--test", "-t", action="store_true", help="Run the automated test suite (90 tests)")
+    parser.add_argument("--test", "-t", action="store_true", help="Run the automated test suite (100 tests)")
     parser.add_argument("--agents", "-a", action="store_true", help="List all 14 grounded employee persona agents")
+    parser.add_argument("--simulate", "-s", action="store_true", help="Display daily simulated persona activities after 31 Oct 2026")
     parser.add_argument("--as-of", type=str, default="2026-11-20", help="As-of simulation cutoff date (default: 2026-11-20)")
 
     args = parser.parse_args()
@@ -131,6 +132,26 @@ def main():
     # Step 3: Handle persona roster
     if args.agents:
         list_personas()
+        return
+
+    # Step 3b: Handle living persona simulation
+    if args.simulate:
+        from src.simulation import LivingPersonaSimulation
+        sim = LivingPersonaSimulation()
+        digest = sim.get_daily_digest(args.as_of)
+        print("\n" + "=" * 75)
+        print(f" VELOXA TECHNOLOGIES — LIVING PERSONA DAILY DIGEST")
+        print(f" Date: {args.as_of} (Candidate Brief Stretch Goal: Living After 31 Oct 2026)")
+        print("=" * 75)
+        by_dept = {}
+        for act in digest:
+            by_dept.setdefault(act["dept"], []).append(act)
+        for dept, acts in by_dept.items():
+            print(f"\n>>> {dept.upper()} ({len(acts)}) <<<")
+            for a in acts:
+                print(f"  • [{a['emp_id']}] {a['emp_name']:<20} | [{a['activity_type']}]")
+                print(f"      {a['summary']}")
+        print("=" * 75 + "\n")
         return
 
     # Step 4: Import CockpitEngine
